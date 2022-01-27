@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/zhangdapeng520/zdpgo_gin/code"
+	"github.com/zhangdapeng520/zdpgo_code"
 )
 
 // Response 响应
@@ -17,8 +17,8 @@ type Response struct {
 // NewResponse 创建默认的响应对象
 func NewResponse() Response {
 	resp := Response{
-		Code:    code.CODE_SUCCESS,
-		Message: code.MESSAGE_SUCCESS,
+		Code:    zdpgo_code.CODE_SUCCESS,
+		Message: zdpgo_code.MESSAGE_SUCCESS,
 		Status:  true,
 	}
 	return resp
@@ -35,8 +35,8 @@ type ResponseData struct {
 // NewResponseData 创建响应数据
 func NewResponseData(data interface{}) ResponseData {
 	resp := ResponseData{
-		Code:    code.CODE_SUCCESS,
-		Message: code.MESSAGE_SUCCESS,
+		Code:    zdpgo_code.CODE_SUCCESS,
+		Message: zdpgo_code.MESSAGE_SUCCESS,
 		Status:  true,
 		Data:    data,
 	}

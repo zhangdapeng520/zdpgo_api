@@ -3,7 +3,7 @@ package zdpgo_gin
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/mojocn/base64Captcha"
-	"github.com/zhangdapeng520/zdpgo_gin/code"
+	"github.com/zhangdapeng520/zdpgo_code"
 )
 
 // 默认内存存储的方式
@@ -24,7 +24,7 @@ func (g *Gin) getCaptcha(ctx *gin.Context) {
 	rsp := NewResponse()
 	if err != nil {
 		g.log.Error("生成验证码错误", "error", err.Error())
-		rsp.Code = code.CODE_PARAM_ERROR
+		rsp.Code = zdpgo_code.CODE_PARAM_ERROR
 		rsp.Message = "生成验证码错误"
 		g.Success(ctx, rsp)
 		return

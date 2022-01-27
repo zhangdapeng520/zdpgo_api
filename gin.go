@@ -20,6 +20,8 @@ type GinConfig struct {
 	Debug       bool   // 是否为debug模式
 	LogFilePath string // 日志路径
 	Language    string // 语言，默认zh中文
+	JwtKey      string // jwt权限校验的key
+	JwtExpired  int64  // jwt过期时间（秒）
 }
 
 // New 生成Gin对象
@@ -46,6 +48,14 @@ func New(config GinConfig) *Gin {
 	g.err = g.initTrans(config.Language)
 	if g.err != nil {
 		g.log.Error("初始化翻译器失败", "error", g.err.Error())
+	}
+
+	// 初始化jwt
+	if config.JwtKey == "" {
+		config.JwtKey = "zhangdapengZHANGDAPENG!@#$%^&*()_+123456789"
+	}
+	if config.JwtExpired == 0 {
+		config.JwtExpired = 60 * 60 * 3 // 3小时
 	}
 
 	// 注册内置的校验器

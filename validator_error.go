@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	"github.com/zhangdapeng520/zdpgo_gin/code"
+	"github.com/zhangdapeng520/zdpgo_code"
 )
 
 func removeTopStruct(fileds map[string]string) map[string]string {
@@ -20,15 +20,17 @@ func (g *Gin) HandleValidatorError(c *gin.Context, err error) {
 	errs, ok := err.(validator.ValidationErrors)
 	rsp := NewResponse()
 	if !ok {
-		rsp.Code = code.CODE_PARAM_ERROR
+		rsp.Status = false
+		rsp.Code = zdpgo_code.CODE_PARAM_ERROR
 		rsp.Message = err.Error()
 		g.Success(c, rsp)
 		return
 	}
 	data := removeTopStruct(errs.Translate(g.trans))
 	rspData := NewResponseData(data)
-	rspData.Code = code.CODE_PARAM_ERROR
-	rsp.Message = code.MESSAGE_PARAM_ERROR
+	rspData.Code = zdpgo_code.CODE_PARAM_ERROR
+	rspData.Message = zdpgo_code.MESSAGE_PARAM_ERROR
+	rspData.Status = false
 	g.SuccessData(c, rspData)
 	return
 }
