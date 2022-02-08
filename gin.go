@@ -3,16 +3,18 @@ package zdpgo_gin
 import (
 	"github.com/gin-gonic/gin"
 	ut "github.com/go-playground/universal-translator"
+	"github.com/zhangdapeng520/zdpgo_mysql"
 	"github.com/zhangdapeng520/zdpgo_zap"
 )
 
 // Gin 核心对象
 type Gin struct {
-	log    *zdpgo_zap.Zap // 日志对象
-	config *GinConfig     // 配置对象
-	trans  ut.Translator  // 翻译器对象
-	err    error          // 错误信息对象，记录最近的错误
-	app    *gin.Engine    // app核心对象
+	log    *zdpgo_zap.Zap     // 日志对象
+	config *GinConfig         // 配置对象
+	trans  ut.Translator      // 翻译器对象
+	err    error              // 错误信息对象，记录最近的错误
+	app    *gin.Engine        // app核心对象
+	mysql  *zdpgo_mysql.Mysql // mysql核心对象
 }
 
 // GinConfig 配置对象
@@ -65,4 +67,11 @@ func New(config GinConfig) *Gin {
 	g.config = &config
 
 	return &g
+}
+
+// SetMysql 设置MySQL
+func (g *Gin) SetMysql(config zdpgo_mysql.MysqlConfig) {
+	if g.mysql == nil {
+		g.mysql = zdpgo_mysql.New(config)
+	}
 }

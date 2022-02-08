@@ -1,17 +1,3 @@
-# zdpgo_gin
-基于gin二次封装的一个后端api快速开发框架
-
-项目地址：https://github.com/zhangdapeng520/zdpgo_gin
-
-## 功能清单
-- 根据MySQL数据库表自动生成REST风格的CRUD API接口
-
-## 版本历史
-- 版本1.0.0：2022年2月9日
-
-## 示例
-### 根据MySQL数据库表自动生成REST风格的CRUD API接口
-```shell
 package main
 
 import (
@@ -56,4 +42,3 @@ func main() {
 	// 启动app
 	app.Run("0.0.0.0:8888")
 }
-```
