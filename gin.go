@@ -13,17 +13,8 @@ type Gin struct {
 	config *GinConfig         // 配置对象
 	trans  ut.Translator      // 翻译器对象
 	err    error              // 错误信息对象，记录最近的错误
-	app    *gin.Engine        // app核心对象
+	App    *gin.Engine        // app核心对象，可以被外部访问，用于加载路由
 	mysql  *zdpgo_mysql.Mysql // mysql核心对象
-}
-
-// GinConfig 配置对象
-type GinConfig struct {
-	Debug       bool   // 是否为debug模式
-	LogFilePath string // 日志路径
-	Language    string // 语言，默认zh中文
-	JwtKey      string // jwt权限校验的key
-	JwtExpired  int64  // jwt过期时间（秒）
 }
 
 // New 生成Gin对象
@@ -32,16 +23,26 @@ func New(config GinConfig) *Gin {
 
 	// 初始化日志
 	if config.LogFilePath == "" {
-		config.LogFilePath = "zdpgo_gin.log"
+		config.LogFilePath = "logs/zdpgo/zdpgo_gin.log"
 	}
 	l := zdpgo_zap.New(zdpgo_zap.ZapConfig{
 		Debug:        config.Debug,
-		OpenGlobal:   true,
+		OpenGlobal:   false,
 		OpenFileName: true,
 		LogFilePath:  config.LogFilePath,
 	})
 
 	g.log = l
+
+	// 初始化app
+	g.App = gin.Default()         // 创建app
+	g.App.Use(g.MiddlewareCors()) // 使用跨域中间件
+	g.RegisterCommonRouter(g.App) // 注册通用路由
+	if config.Debug {
+		gin.SetMode(gin.DebugMode)
+	} else {
+		gin.SetMode(gin.ReleaseMode)
+	}
 
 	// 初始化翻译
 	if config.Language == "" {

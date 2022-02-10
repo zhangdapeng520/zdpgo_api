@@ -9,8 +9,8 @@ import (
 // 默认内存存储的方式
 var store = base64Captcha.DefaultMemStore
 
-// GetCaptcha 获取图片验证码
-func (g *Gin) getCaptcha(ctx *gin.Context) {
+// GetRouterCommonCaptcha 获取图片验证码
+func (g *Gin) GetRouterCommonCaptcha(ctx *gin.Context) {
 	// 创建驱动
 	driver := base64Captcha.NewDriverDigit(80, 240, 5, 0.7, 80)
 

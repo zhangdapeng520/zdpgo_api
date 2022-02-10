@@ -23,10 +23,10 @@ func (g *Gin) CreateApp() *gin.Engine {
 	app.Use(g.MiddlewareCors())
 
 	// 挂载通用路由
-	app.GET("/captcha", g.getCaptcha)
+	app.GET("/captcha", g.GetRouterCommonCaptcha)
 
 	// 初始化
-	g.app = app
+	g.App = app
 
 	// 返回
 	return app
@@ -35,7 +35,7 @@ func (g *Gin) CreateApp() *gin.Engine {
 // Run 启动服务
 func (g *Gin) Run(port uint16) {
 	g.log.Info("启动服务器", "端口", port)
-	if err := g.app.Run(fmt.Sprintf(":%d", port)); err != nil {
+	if err := g.App.Run(fmt.Sprintf(":%d", port)); err != nil {
 		g.log.Panic("启动失败", "error", err.Error())
 	}
 }
