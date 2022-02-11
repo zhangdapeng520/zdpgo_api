@@ -188,8 +188,8 @@ github.com/zhangdapeng520/zdpgo_code v0.1.0/go.mod h1:A5Q5zEIjRgNcn3sqE5LSGkWyo7
 github.com/zhangdapeng520/zdpgo_mysql v1.5.0 h1:4I60TCAWRTQJwg9aCXVayHkbt4C++kfhjAleLTFA+lM=
 github.com/zhangdapeng520/zdpgo_mysql v1.5.0/go.mod h1:/3LujGTDVvh+O7NhMc6W/WDGM9k3J4inLvw5Ae+oT7Q=
 github.com/zhangdapeng520/zdpgo_zap v0.1.1/go.mod h1:FcHMPIKdhGuHgCMZmIinRyHh4idCPU3FwAVY5g8pBUU=
-github.com/zhangdapeng520/zdpgo_zap v0.2.1 h1:B+ByGYsa3+PXY1PLksFa6xjcJK3p7X0/G9GYvHw9KA4=
-github.com/zhangdapeng520/zdpgo_zap v0.2.1/go.mod h1:dYRttuTsDM4Je/SPGqLZcT1lyuUrBcb0Sm/KEXVUfRg=
+github.com/zhangdapeng520/zdpgo_zap v0.2.3 h1:OCeBnt8xO9YLZnry+hajaWm0gG8sYrZVKheGJCMYlMw=
+github.com/zhangdapeng520/zdpgo_zap v0.2.3/go.mod h1:dYRttuTsDM4Je/SPGqLZcT1lyuUrBcb0Sm/KEXVUfRg=
 go.uber.org/atomic v1.3.2/go.mod h1:gD2HeocX3+yG+ygLZcrzQJaqmWj9AIm7n08wl/qW/PE=
 go.uber.org/atomic v1.4.0/go.mod h1:gD2HeocX3+yG+ygLZcrzQJaqmWj9AIm7n08wl/qW/PE=
 go.uber.org/atomic v1.6.0/go.mod h1:sABNBOSYdrvTF6hTgEIbc7YasKWGhgEQZyfxyTvoXHQ=

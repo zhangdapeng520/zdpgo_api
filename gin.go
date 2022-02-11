@@ -36,9 +36,11 @@ func New(config GinConfig) *Gin {
 	g.log = l
 
 	// 初始化app
-	g.App = gin.Default()         // 创建app
-	g.App.Use(g.MiddlewareCors()) // 使用跨域中间件
-	g.RegisterCommonRouter(g.App) // 注册通用路由
+	g.App = gin.New()                 // 创建app
+	g.App.Use(g.MiddlewareCors())     // 使用跨域中间件
+	g.App.Use(g.MiddlewareLogger())   // 使用日志中间件
+	g.App.Use(g.MiddlewareRecovery()) // 使用异常捕获中间件
+	g.RegisterCommonRouter(g.App)     // 注册通用路由
 	if config.Debug {
 		gin.SetMode(gin.DebugMode)
 	} else {
