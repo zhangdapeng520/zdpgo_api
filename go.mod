@@ -18,6 +18,7 @@ require (
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/natefinch/lumberjack v2.0.0+incompatible // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
@@ -37,11 +38,6 @@ require (
 	github.com/go-playground/universal-translator v0.18.0
 	github.com/mojocn/base64Captcha v1.3.5
 	github.com/zhangdapeng520/zdpgo_code v0.1.0
-	github.com/zhangdapeng520/zdpgo_mysql v0.1.0
-	github.com/zhangdapeng520/zdpgo_zap v0.1.1
-)
-
-replace (
-	github.com/zhangdapeng520/zdpgo_mysql v0.1.0 => ../zdpgo_mysql
-	github.com/zhangdapeng520/zdpgo_zap v0.1.0 => ../zdpgo_zap
+	github.com/zhangdapeng520/zdpgo_mysql v1.5.0
+	github.com/zhangdapeng520/zdpgo_zap v0.2.1
 )

@@ -48,7 +48,7 @@ func New(config GinConfig) *Gin {
 	// 加载模板
 	if config.TemplatePath == "" {
 		config.TemplatePath = "template/*"
-		err := createMultiDir(config.TemplatePath)
+		err := createMultiDir("template")
 		if err != nil {
 			g.log.Error("创建模板目录失败", "error", err.Error())
 		}
