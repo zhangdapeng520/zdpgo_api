@@ -5,6 +5,7 @@ import (
 	ut "github.com/go-playground/universal-translator"
 	"github.com/zhangdapeng520/zdpgo_mysql"
 	"github.com/zhangdapeng520/zdpgo_zap"
+	"net/http"
 )
 
 // Gin 核心对象
@@ -43,6 +44,30 @@ func New(config GinConfig) *Gin {
 	} else {
 		gin.SetMode(gin.ReleaseMode)
 	}
+
+	// 加载模板
+	if config.TemplatePath == "" {
+		config.TemplatePath = "template/*"
+		err := createMultiDir(config.TemplatePath)
+		if err != nil {
+			g.log.Error("创建模板目录失败", "error", err.Error())
+		}
+	}
+	g.App.LoadHTMLGlob(config.TemplatePath) // 加载模板
+
+	// 加载静态目录
+	if config.StaticPath == "" {
+		config.StaticPath = "static"
+		err := createMultiDir(config.StaticPath)
+		if err != nil {
+			g.log.Error("创建静态目录失败", "error", err.Error())
+		}
+	}
+	if config.StaticUrl == "" {
+		config.StaticUrl = "/static"
+	}
+	g.log.Info("指定静态目录", "url", config.StaticUrl, "path", config.StaticPath)
+	g.App.StaticFS(config.StaticUrl, http.Dir(config.StaticPath)) // 指定静态目录
 
 	// 初始化翻译
 	if config.Language == "" {

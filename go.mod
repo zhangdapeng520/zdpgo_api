@@ -42,7 +42,6 @@ require (
 )
 
 replace (
-	github.com/zhangdapeng520/zdpgo_code v0.1.0 => ../zdpgo_code
 	github.com/zhangdapeng520/zdpgo_mysql v0.1.0 => ../zdpgo_mysql
 	github.com/zhangdapeng520/zdpgo_zap v0.1.0 => ../zdpgo_zap
 )
