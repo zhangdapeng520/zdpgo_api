@@ -1,6 +1,10 @@
 package zdpgo_gin
 
 import (
+	"fmt"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
+	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/zhangdapeng520/zdpgo_mysql"
@@ -40,6 +44,9 @@ func New(config GinConfig) *Gin {
 	g.App.Use(g.MiddlewareCors())     // 使用跨域中间件
 	g.App.Use(g.MiddlewareLogger())   // 使用日志中间件
 	g.App.Use(g.MiddlewareRecovery()) // 使用异常捕获中间件
+
+	// 创建session
+	initSession(&config.Session, g.App)
 
 	// 注册通用路由
 	if config.OpenCommonRouter {
@@ -96,5 +103,49 @@ func New(config GinConfig) *Gin {
 func (g *Gin) SetMysql(config zdpgo_mysql.MysqlConfig) {
 	if g.mysql == nil {
 		g.mysql = zdpgo_mysql.New(config)
+	}
+}
+
+// 初始化session
+func initSession(config *SessionConfig, app *gin.Engine) {
+	// 不使用session
+	if !config.OpenSession {
+		return
+	}
+
+	// 参数校验
+	if config.Key == "" {
+		config.Key = "zdpgo_gin_cookie_session_SECRET_123"
+	}
+	if config.SessionName == "" {
+		config.SessionName = "zdpgo_gin_cookie_session"
+	}
+
+	// 如果是cookie
+	if config.SessionType == "cookie" {
+		// 创建基于cookie的存储引擎
+		store := cookie.NewStore([]byte(config.Key))
+
+		// 设置session中间件
+		// store是前面创建的存储引擎，我们可以替换成其他存储引擎
+		app.Use(sessions.Sessions(config.SessionName, store))
+	} else if config.SessionType == "redis" {
+		if config.RedisSize == 0 {
+			config.RedisSize = 10
+		}
+		address := fmt.Sprintf("%s:%d", config.RedisHost, config.RedisPort)
+		// 初始化基于redis的存储引擎
+		// 参数说明：
+		//    第1个参数 - redis最大的空闲连接数
+		//    第2个参数 - 数通信协议tcp或者udp
+		//    第3个参数 - redis地址, 格式，host:port
+		//    第4个参数 - redis密码
+		//    第5个参数 - session加密密钥
+		store, _ := redis.NewStore(int(config.RedisSize),
+			"tcp",
+			address,
+			"",
+			[]byte(config.Key))
+		app.Use(sessions.Sessions(config.SessionName, store))
 	}
 }
