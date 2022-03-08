@@ -22,25 +22,21 @@ func main() {
 	r.Use(gin.Recovery())
 
 	// 路由添加中间件，可以添加任意多个
-	r.GET("/benchmark", gin.Logger(), gin.Recovery())
+	r.GET("/test", gin.Logger(), gin.Recovery(), pong)
+
+	authorized := r.Group("/")
 
 	// 路由组中添加中间件
-	// authorized := r.Group("/", AuthRequired())
-	// exactly the same as:
-	authorized := r.Group("/")
-	// per group middleware! in this case we use the custom created
-	// AuthRequired() middleware just in the "authorized" group.
 	authorized.Use(gin.Recovery())
 	{
 		authorized.POST("/login", pong)
-		authorized.POST("/submit", pong)
-		authorized.POST("/read", pong)
+		authorized.POST("/logout", pong)
 
-		// nested group
-		testing := authorized.Group("testing")
-		testing.GET("/analytics", pong)
+		// 嵌套分组
+		testing := authorized.Group("test1")
+		testing.POST("/abc", pong)
 	}
 
-	// Listen and serve on 0.0.0.0:8080
+	// 启动服务
 	r.Run(":8080")
 }

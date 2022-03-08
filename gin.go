@@ -48,28 +48,19 @@ func New(config GinConfig) *Gin {
 	}
 
 	// 加载模板
-	if config.TemplatePath == "" {
-		config.TemplatePath = "template/*"
-		err := createMultiDir("template")
-		if err != nil {
-			g.log.Error("创建模板目录失败", "error", err.Error())
-		}
+	if config.TemplatePath != "" {
+		g.log.Info("加载模板", "templatePath", config.TemplatePath)
+		g.App.LoadHTMLGlob(config.TemplatePath) // 加载模板
 	}
-	g.App.LoadHTMLGlob(config.TemplatePath) // 加载模板
 
 	// 加载静态目录
-	if config.StaticPath == "" {
-		config.StaticPath = "static"
-		err := createMultiDir(config.StaticPath)
-		if err != nil {
-			g.log.Error("创建静态目录失败", "error", err.Error())
+	if config.StaticPath != "" {
+		if config.StaticUrl == "" {
+			config.StaticUrl = "/static"
 		}
+		g.log.Info("指定静态目录", "url", config.StaticUrl, "path", config.StaticPath)
+		g.App.StaticFS(config.StaticUrl, http.Dir(config.StaticPath)) // 指定静态目录
 	}
-	if config.StaticUrl == "" {
-		config.StaticUrl = "/static"
-	}
-	g.log.Info("指定静态目录", "url", config.StaticUrl, "path", config.StaticPath)
-	g.App.StaticFS(config.StaticUrl, http.Dir(config.StaticPath)) // 指定静态目录
 
 	// 初始化翻译
 	if config.Language == "" {

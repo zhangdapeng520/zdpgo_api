@@ -33,9 +33,16 @@ func (g *Gin) CreateApp() *gin.Engine {
 }
 
 // Run 启动服务
-func (g *Gin) Run(port uint16) {
-	g.log.Info("启动服务器", "端口", port)
-	if err := g.App.Run(fmt.Sprintf(":%d", port)); err != nil {
+func (g *Gin) Run(port ...uint16) {
+	// 默认端口
+	var p uint16 = 8080
+
+	// 使用传进来的端口
+	if len(port) > 0 {
+		p = port[0]
+	}
+	g.log.Info("启动服务器", "端口", p)
+	if err := g.App.Run(fmt.Sprintf(":%d", p)); err != nil {
 		g.log.Panic("启动失败", "error", err.Error())
 	}
 }
