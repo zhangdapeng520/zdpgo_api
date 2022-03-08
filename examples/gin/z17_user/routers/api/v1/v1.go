@@ -18,5 +18,4 @@ func RegisterV1(app *gin.Engine) {
 	v1.POST("/login/phone/code", loginPhoneCode)    // 手机号和验证码登录
 	v1.POST("/login/email/code", loginEmailCode)    // 邮箱和验证码登录
 	v1.POST("/send_email", sendEmail)               // 发送邮件
-
 }

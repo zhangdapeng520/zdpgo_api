@@ -36,7 +36,7 @@ require (
 	github.com/go-playground/locales v0.14.0
 	github.com/go-playground/universal-translator v0.18.0
 	github.com/mojocn/base64Captcha v1.3.5
-	github.com/zhangdapeng520/zdpgo_code v0.1.0
+	github.com/zhangdapeng520/zdpgo_code v0.1.1
 	github.com/zhangdapeng520/zdpgo_mysql v1.5.0
 	github.com/zhangdapeng520/zdpgo_zap v0.2.3
 	go.uber.org/zap v1.20.0
