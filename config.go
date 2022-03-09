@@ -27,6 +27,7 @@ type GinConfig struct {
 	StaticPath       string        // 静态文件路径
 	StaticUrl        string        // 静态文件路由
 	OpenCommonRouter bool          // 是否挂载通用路由
+	OpenWebsocket    bool          // 是否开启websocket通信
 	Session          SessionConfig // session配置
 	Jwt              JwtConfig     // jwt配置
 }

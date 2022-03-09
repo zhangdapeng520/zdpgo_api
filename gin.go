@@ -7,6 +7,7 @@ import (
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
 	ut "github.com/go-playground/universal-translator"
+	"github.com/gorilla/websocket"
 	"github.com/zhangdapeng520/zdpgo_mysql"
 	"github.com/zhangdapeng520/zdpgo_zap"
 	"net/http"
@@ -19,6 +20,7 @@ type Gin struct {
 	trans  ut.Translator      // 翻译器对象
 	err    error              // 错误信息对象，记录最近的错误
 	App    *gin.Engine        // app核心对象，可以被外部访问，用于加载路由
+	Ws     websocket.Upgrader // websocket核心对象
 	mysql  *zdpgo_mysql.Mysql // mysql核心对象
 }
 
@@ -51,6 +53,11 @@ func New(config GinConfig) *Gin {
 	// 注册通用路由
 	if config.OpenCommonRouter {
 		g.RegisterCommonRouter(g.App)
+	}
+
+	// 开启websocket
+	if config.OpenWebsocket {
+		initWebsocket(&g.Ws)
 	}
 	if config.Debug {
 		gin.SetMode(gin.DebugMode)
@@ -97,6 +104,32 @@ func New(config GinConfig) *Gin {
 	g.config = &config
 
 	return &g
+}
+
+// 初始化websocket
+func initWebsocket(w *websocket.Upgrader) {
+	*w = websocket.Upgrader{
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
+	}
+}
+
+// CreateWebsocket 创建websocket
+func (g *Gin) CreateWebsocket(c *gin.Context, responseHeaders ...http.Header) (*websocket.Conn, error) {
+	// 请求头
+	var header http.Header
+	if len(responseHeaders)>0{
+		header=responseHeaders[0]
+	}
+
+	// 创建websocket
+	ws, err := g.Ws.Upgrade(c.Writer, c.Request, header)
+	if err != nil {
+		g.log.Error("创建websocket连接失败", "error", err.Error())
+		return nil, err
+	}
+	return ws, nil
 }
 
 // SetMysql 设置MySQL
