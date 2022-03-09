@@ -1,8 +1,14 @@
 package zdpgo_gin
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -33,16 +39,56 @@ func (g *Gin) CreateApp() *gin.Engine {
 }
 
 // Run 启动服务
-func (g *Gin) Run(port ...uint16) {
+func (g *Gin) Run(shutdownFuncArr ...func(args ...interface{})) {
 	// 默认端口
-	var p uint16 = 8080
+	if g.config.Server.Host == "" {
+		g.config.Server.Host = "0.0.0.0"
+	}
+	if g.config.Server.Port == 0 {
+		g.config.Server.Port = 8888
+	}
 
-	// 使用传进来的端口
-	if len(port) > 0 {
-		p = port[0]
+	// 创建应用
+	address := fmt.Sprintf(
+		"%s:%d",
+		g.config.Server.Host,
+		g.config.Server.Port,
+	)
+	srv := &http.Server{
+		Addr:    address,
+		Handler: g.App,
 	}
-	g.log.Info("启动服务器", "端口", p)
-	if err := g.App.Run(fmt.Sprintf(":%d", p)); err != nil {
-		g.log.Panic("启动失败", "error", err.Error())
+
+	// 启动服务
+	g.log.Info("启动服务器", "host", g.config.Server.Host, "port", g.config.Server.Port)
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && errors.Is(err, http.ErrServerClosed) {
+			g.log.Error("服务退出", "error", err.Error())
+		}
+	}()
+
+	// 创建退出信号管道
+	quit := make(chan os.Signal)
+
+	// 监听信号
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	g.log.Info("关闭服务...")
+
+	// 设置定时器，关闭服务
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	// 执行退出函数
+	for _, shutdownFunc := range shutdownFuncArr {
+		shutdownFunc()
 	}
+
+	// 关闭服务
+	if err := srv.Shutdown(ctx); err != nil {
+		g.log.Fatal("强制关闭服务", "error", err.Error())
+	}
+
+	// 正常关闭服务
+	g.log.Info("关闭服务成功！")
 }

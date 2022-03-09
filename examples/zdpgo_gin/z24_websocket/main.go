@@ -13,8 +13,11 @@ func init() {
 	g = zdpgo_gin.New(zdpgo_gin.GinConfig{
 		Debug:         true,
 		OpenWebsocket: true, // 开启websocket
+		Server: zdpgo_gin.ServerConfig{
+			Host: "localhost",
+			Port: 2303,
+		},
 	})
-
 }
 
 //webSocket请求ping 返回pong
@@ -44,5 +47,5 @@ func ping(c *gin.Context) {
 
 func main() {
 	g.App.GET("/ping", ping)
-	g.Run(2303)
+	g.Run()
 }

@@ -18,6 +18,12 @@ type JwtConfig struct {
 	JwtExpired int64  // jwt过期时间（秒）
 }
 
+// ServerConfig 服务配置
+type ServerConfig struct {
+	Host string // 服务启动的主机地址
+	Port uint16 // 服务启动的端口号
+}
+
 // GinConfig 配置对象
 type GinConfig struct {
 	Debug            bool          // 是否为debug模式
@@ -30,4 +36,5 @@ type GinConfig struct {
 	OpenWebsocket    bool          // 是否开启websocket通信
 	Session          SessionConfig // session配置
 	Jwt              JwtConfig     // jwt配置
+	Server           ServerConfig  // jwt配置
 }
