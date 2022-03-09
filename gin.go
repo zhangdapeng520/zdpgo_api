@@ -146,7 +146,7 @@ func initSession(config *SessionConfig, app *gin.Engine) {
 
 		// redis连接地址
 		address := fmt.Sprintf("%s:%d", config.RedisHost, config.RedisPort)
-		
+
 		// 初始化基于redis的存储引擎
 		// 参数说明：
 		//    第1个参数 - redis最大的空闲连接数
@@ -163,4 +163,18 @@ func initSession(config *SessionConfig, app *gin.Engine) {
 	} else {
 		panic("暂不支持此类型的session")
 	}
+}
+
+// OpenBasicAuth 开启BasicAuth校验
+func (g *Gin) OpenBasicAuth(accounts map[string]string, groups ...*gin.RouterGroup) {
+	// 对指定group添加BasicAuth
+	if len(groups) > 0 {
+		for _, group := range groups {
+			group.Use(gin.BasicAuth(accounts))
+		}
+		return
+	}
+
+	// 全局开启BasicAuth
+	g.App.Use(gin.BasicAuth(accounts))
 }
