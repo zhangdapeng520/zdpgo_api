@@ -3,22 +3,22 @@ package main
 import (
 	// 导入session包
 	"github.com/gin-contrib/sessions"
-	// 导入session存储引擎
-	"github.com/gin-contrib/sessions/cookie"
+	"github.com/zhangdapeng520/zdpgo_gin"
+
 	// 导入gin框架包
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	r := gin.Default()
-	// 创建基于cookie的存储引擎，secret11111 参数是用于加密的密钥
-	store := cookie.NewStore([]byte("secret11111"))
+	// 创建核心对象
+	g := zdpgo_gin.New(zdpgo_gin.GinConfig{
+		Debug: true,
+		Session: zdpgo_gin.SessionConfig{
+			OpenSession: true,
+		},
+	})
 
-	// 设置session中间件，参数mysession，指的是session的名字，也是cookie的名字
-	// store是前面创建的存储引擎，我们可以替换成其他存储引擎
-	r.Use(sessions.Sessions("mysession", store))
-
-	r.GET("/test", func(c *gin.Context) {
+	g.App.GET("/test", func(c *gin.Context) {
 		// 初始化session对象
 		session := sessions.Default(c)
 
@@ -37,5 +37,5 @@ func main() {
 
 		c.JSON(200, gin.H{"hello": session.Get("hello")})
 	})
-	r.Run(":8080")
+	g.Run(8080)
 }

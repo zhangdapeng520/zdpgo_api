@@ -83,11 +83,11 @@ func New(config GinConfig) *Gin {
 	}
 
 	// 初始化jwt
-	if config.JwtKey == "" {
-		config.JwtKey = "zhangdapengZHANGDAPENG!@#$%^&*()_+123456789"
+	if config.Jwt.JwtKey == "" {
+		config.Jwt.JwtKey = "zhangdapengZHANGDAPENG!@#$%^&*()_+123456789"
 	}
-	if config.JwtExpired == 0 {
-		config.JwtExpired = 60 * 60 * 3 // 3小时
+	if config.Jwt.JwtExpired == 0 {
+		config.Jwt.JwtExpired = 60 * 60 * 3 // 3小时
 	}
 
 	// 注册内置的校验器
@@ -120,6 +120,9 @@ func initSession(config *SessionConfig, app *gin.Engine) {
 	if config.SessionName == "" {
 		config.SessionName = "zdpgo_gin_cookie_session"
 	}
+	if config.SessionType == "" {
+		config.SessionType = "cookie"
+	}
 
 	// 如果是cookie
 	if config.SessionType == "cookie" {
@@ -130,10 +133,20 @@ func initSession(config *SessionConfig, app *gin.Engine) {
 		// store是前面创建的存储引擎，我们可以替换成其他存储引擎
 		app.Use(sessions.Sessions(config.SessionName, store))
 	} else if config.SessionType == "redis" {
+		// 参数校验
+		if config.RedisHost == "" {
+			config.RedisHost = "127.0.0.1"
+		}
+		if config.RedisPort == 0 {
+			config.RedisPort = 6379
+		}
 		if config.RedisSize == 0 {
 			config.RedisSize = 10
 		}
+
+		// redis连接地址
 		address := fmt.Sprintf("%s:%d", config.RedisHost, config.RedisPort)
+		
 		// 初始化基于redis的存储引擎
 		// 参数说明：
 		//    第1个参数 - redis最大的空闲连接数
@@ -147,5 +160,7 @@ func initSession(config *SessionConfig, app *gin.Engine) {
 			"",
 			[]byte(config.Key))
 		app.Use(sessions.Sessions(config.SessionName, store))
+	} else {
+		panic("暂不支持此类型的session")
 	}
 }

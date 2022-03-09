@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
@@ -18,8 +19,10 @@ func main() {
 	store, _ := redis.NewStore(10, "tcp", "localhost:6379", "", []byte("secret"))
 	r.Use(sessions.Sessions("mysession", store))
 
-	r.GET("/incr", func(c *gin.Context) {
+	r.GET("/test", func(c *gin.Context) {
 		session := sessions.Default(c)
+		session.Set("count", 33)
+		
 		var count int
 		v := session.Get("count")
 		if v == nil {
@@ -29,8 +32,11 @@ func main() {
 			count++
 		}
 		session.Set("count", count)
-		session.Save()
+		err := session.Save()
+		if err != nil {
+			fmt.Println("保存session失败：", err.Error())
+		}
 		c.JSON(200, gin.H{"count": count})
 	})
-	r.Run(":8000")
+	r.Run(":8080")
 }
