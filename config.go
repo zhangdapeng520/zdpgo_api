@@ -20,8 +20,11 @@ type JwtConfig struct {
 
 // ServerConfig 服务配置
 type ServerConfig struct {
-	Host string // 服务启动的主机地址
-	Port uint16 // 服务启动的端口号
+	Host           string // 服务启动的主机地址
+	Port           uint16 // 服务启动的端口号
+	ReadTimeout    uint16 // 读超时时间
+	WriteTimeout   uint16 // 写超时时间
+	MaxHeaderBytes uint32 // 请求头大小限制
 }
 
 // GinConfig 配置对象

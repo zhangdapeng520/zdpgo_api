@@ -39,13 +39,22 @@ func (g *Gin) CreateApp() *gin.Engine {
 }
 
 // Run 启动服务
-func (g *Gin) Run(shutdownFuncArr ...func(args ...interface{})) {
+func (g *Gin) Run(shutdownFuncArr ...func()) {
 	// 默认端口
 	if g.config.Server.Host == "" {
 		g.config.Server.Host = "0.0.0.0"
 	}
 	if g.config.Server.Port == 0 {
 		g.config.Server.Port = 8888
+	}
+	if g.config.Server.ReadTimeout == 0 {
+		g.config.Server.ReadTimeout = 33
+	}
+	if g.config.Server.WriteTimeout == 0 {
+		g.config.Server.WriteTimeout = 33
+	}
+	if g.config.Server.MaxHeaderBytes == 0 {
+		g.config.Server.MaxHeaderBytes = 1024 * 1024
 	}
 
 	// 创建应用
@@ -54,9 +63,13 @@ func (g *Gin) Run(shutdownFuncArr ...func(args ...interface{})) {
 		g.config.Server.Host,
 		g.config.Server.Port,
 	)
+
 	srv := &http.Server{
-		Addr:    address,
-		Handler: g.App,
+		Addr:           address,
+		Handler:        g.App,
+		ReadTimeout:    time.Duration(g.config.Server.ReadTimeout) * time.Second,  // 读超时时间
+		WriteTimeout:   time.Duration(g.config.Server.WriteTimeout) * time.Second, // 写超时时间
+		MaxHeaderBytes: int(g.config.Server.MaxHeaderBytes),                       // 请求头大小限制
 	}
 
 	// 启动服务
