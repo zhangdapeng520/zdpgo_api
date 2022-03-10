@@ -31,5 +31,5 @@ func main() {
 		c.String(http.StatusOK, message)
 	})
 
-	g.Run(8080)
+	g.Run()
 }

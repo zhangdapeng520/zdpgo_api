@@ -30,5 +30,5 @@ func main() {
 	app.OPTIONS("/", pong)
 
 	// 启动服务
-	g.Run(8080)
+	g.Run()
 }

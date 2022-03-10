@@ -31,14 +31,14 @@ var (
 // @return 成功返回token,失败返回错误信息
 func (g *Gin) CreateToken(claims Claims) (string, error) {
 	// 过期时间默认3小时
-	claims.ExpiresAt = time.Now().Add(time.Second * time.Duration(g.config.Jwt.JwtExpired)).Unix()
+	claims.ExpiresAt = time.Now().Add(time.Second * time.Duration(g.config.Jwt.Expired)).Unix()
 
 	// 创建token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	// 返回token
-	g.log.Info("使用的key是什么", "key", g.config.Jwt.JwtKey)
-	return token.SignedString([]byte(g.config.Jwt.JwtKey))
+	g.log.Info("使用的key是什么", "key", g.config.Jwt.Key)
+	return token.SignedString([]byte(g.config.Jwt.Key))
 }
 
 // ParseToken 解析 token
@@ -47,7 +47,7 @@ func (g *Gin) CreateToken(claims Claims) (string, error) {
 func (g *Gin) ParseToken(tokenString string) (*Claims, error) {
 	// 解析token
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (i interface{}, e error) {
-		return []byte(g.config.Jwt.JwtKey), nil
+		return []byte(g.config.Jwt.Key), nil
 	})
 	g.log.Info("解析token", "token", token, "error", err)
 
@@ -91,7 +91,7 @@ func (g *Gin) RefreshToken(tokenString string) (string, error) {
 
 	// 解析token
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-		return g.config.Jwt.JwtKey, nil
+		return g.config.Jwt.Key, nil
 	})
 	if err != nil {
 		return "", err

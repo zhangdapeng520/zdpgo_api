@@ -90,11 +90,11 @@ func New(config GinConfig) *Gin {
 	}
 
 	// 初始化jwt
-	if config.Jwt.JwtKey == "" {
-		config.Jwt.JwtKey = "zhangdapengZHANGDAPENG!@#$%^&*()_+123456789"
+	if config.Jwt.Key == "" {
+		config.Jwt.Key = "zhangdapengZHANGDAPENG!@#$%^&*()_+123456789"
 	}
-	if config.Jwt.JwtExpired == 0 {
-		config.Jwt.JwtExpired = 60 * 60 * 3 // 3小时
+	if config.Jwt.Expired == 0 {
+		config.Jwt.Expired = 60 * 60 * 3 // 3小时
 	}
 
 	// 注册内置的校验器
@@ -119,8 +119,8 @@ func initWebsocket(w *websocket.Upgrader) {
 func (g *Gin) CreateWebsocket(c *gin.Context, responseHeaders ...http.Header) (*websocket.Conn, error) {
 	// 请求头
 	var header http.Header
-	if len(responseHeaders)>0{
-		header=responseHeaders[0]
+	if len(responseHeaders) > 0 {
+		header = responseHeaders[0]
 	}
 
 	// 创建websocket
@@ -167,18 +167,18 @@ func initSession(config *SessionConfig, app *gin.Engine) {
 		app.Use(sessions.Sessions(config.SessionName, store))
 	} else if config.SessionType == "redis" {
 		// 参数校验
-		if config.RedisHost == "" {
-			config.RedisHost = "127.0.0.1"
+		if config.Redis.Host == "" {
+			config.Redis.Host = "127.0.0.1"
 		}
-		if config.RedisPort == 0 {
-			config.RedisPort = 6379
+		if config.Redis.Port == 0 {
+			config.Redis.Port = 6379
 		}
-		if config.RedisSize == 0 {
-			config.RedisSize = 10
+		if config.Redis.Size == 0 {
+			config.Redis.Size = 10
 		}
 
 		// redis连接地址
-		address := fmt.Sprintf("%s:%d", config.RedisHost, config.RedisPort)
+		address := fmt.Sprintf("%s:%d", config.Redis.Host, config.Redis.Port)
 
 		// 初始化基于redis的存储引擎
 		// 参数说明：
@@ -187,7 +187,7 @@ func initSession(config *SessionConfig, app *gin.Engine) {
 		//    第3个参数 - redis地址, 格式，host:port
 		//    第4个参数 - redis密码
 		//    第5个参数 - session加密密钥
-		store, _ := redis.NewStore(int(config.RedisSize),
+		store, _ := redis.NewStore(int(config.Redis.Size),
 			"tcp",
 			address,
 			"",
