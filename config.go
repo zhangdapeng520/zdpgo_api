@@ -24,11 +24,12 @@ type JwtConfig struct {
 
 // ServerConfig 服务配置
 type ServerConfig struct {
-	Host           string `mapstructure:"host" json:"host"`                         // 服务启动的主机地址
-	Port           uint16 `mapstructure:"port" json:"port"`                         // 服务启动的端口号
-	ReadTimeout    uint16 `mapstructure:"read_timeout" json:"read_timeout"`         // 读超时时间
-	WriteTimeout   uint16 `mapstructure:"write_timeout" json:"write_timeout"`       // 写超时时间
-	MaxHeaderBytes uint32 `mapstructure:"max_header_bytes" json:"max_header_bytes"` // 请求头大小限制
+	Host           string   `mapstructure:"host" json:"host"`                         // 服务启动的主机地址
+	Port           uint16   `mapstructure:"port" json:"port"`                         // 服务启动的端口号
+	ReadTimeout    uint16   `mapstructure:"read_timeout" json:"read_timeout"`         // 读超时时间
+	WriteTimeout   uint16   `mapstructure:"write_timeout" json:"write_timeout"`       // 写超时时间
+	MaxHeaderBytes uint32   `mapstructure:"max_header_bytes" json:"max_header_bytes"` // 请求头大小限制
+	Records        []string `mapstructure:"records" json:"records"`                   //
 }
 
 // GinConfig 配置对象

@@ -10,12 +10,19 @@ func pong(c *gin.Context) {
 		"message": "pong",
 	})
 }
-
-func main() {
+func SetupRouter() *zdpgo_gin.Gin {
 	// 创建核心对象
 	g := zdpgo_gin.New(zdpgo_gin.GinConfig{
 		Debug: true,
+		Server: zdpgo_gin.ServerConfig{
+			Records: []string{"header", "body", "url", "form"},
+		},
 	})
+	return g
+}
+
+func main() {
+	g := SetupRouter()
 
 	// 全局中间件
 	// 使用 Logger 中间件
