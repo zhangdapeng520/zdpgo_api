@@ -24,20 +24,9 @@ func SetupRouter() *zdpgo_gin.Gin {
 func main() {
 	g := SetupRouter()
 
-	// 全局中间件
-	// 使用 Logger 中间件
-	g.App.Use(gin.Logger())
-
-	// 使用 Recovery 中间件
-	g.App.Use(gin.Recovery())
-
-	// 路由添加中间件，可以添加任意多个
-	g.App.GET("/test", gin.Logger(), gin.Recovery(), pong)
-
 	authorized := g.App.Group("/")
 
 	// 路由组中添加中间件
-	authorized.Use(gin.Recovery())
 	{
 		authorized.POST("/login", pong)
 		authorized.POST("/logout", pong)

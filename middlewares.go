@@ -1,9 +1,7 @@
 package zdpgo_gin
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/zhangdapeng520/zdpgo_code"
-	"go.uber.org/zap"
+	"io/ioutil"
 	"net"
 	"net/http"
 	"net/http/httputil"
@@ -11,6 +9,10 @@ import (
 	"runtime/debug"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/zhangdapeng520/zdpgo_code"
+	"go.uber.org/zap"
 )
 
 // MiddlewareCors 跨域中间件
@@ -201,14 +203,18 @@ func (g *Gin) MiddlewareLogger() gin.HandlerFunc {
 
 				// 记录form日志
 				if record == "form" {
-					//type Values map[string][]string
-					g.log.Info("form相关信息", zap.Any("form", c.Request.Form), zap.Any("post_form", c.Request.PostForm))
+					c.Request.ParseForm()
+					var formData = make(map[string]interface{})
+					for k, v := range c.Request.PostForm {
+						formData[k] = v
+					}
+					g.log.Info("form相关信息", zap.Any("form", formData))
 				}
 
 				// 记录body日志
 				if record == "body" {
-					//type Values map[string][]string
-					g.log.Info("body相关信息", zap.Any("body", c.Request.Body))
+					data, _ := ioutil.ReadAll(c.Request.Body)
+					g.log.Info("body相关信息", zap.String("body", string(data)))
 				}
 			}
 		}
