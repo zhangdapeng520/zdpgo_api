@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
 	"log"
 	"net/http"
 	"zdpgo_gin/examples/z17_user/schemas"

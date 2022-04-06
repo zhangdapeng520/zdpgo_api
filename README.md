@@ -36,7 +36,7 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
 	"github.com/zhangdapeng520/zdpgo_gin"
 	"github.com/zhangdapeng520/zdpgo_mysql"
 )

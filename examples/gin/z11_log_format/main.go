@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/gin-gonic/gin"
+	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
 )
 
 func main() {

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
+	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
 	"github.com/sirupsen/logrus"
 	"os"
 	"path"

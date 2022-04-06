@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
 	"net/http"
 	"zdpgo_gin/examples/z17_user/plugins"
 	v1 "zdpgo_gin/examples/z17_user/routers/api/v1"

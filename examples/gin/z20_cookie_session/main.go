@@ -6,7 +6,7 @@ import (
 	// 导入session存储引擎
 	"github.com/gin-contrib/sessions/cookie"
 	// 导入gin框架包
-	"github.com/gin-gonic/gin"
+	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
 )
 
 func main() {

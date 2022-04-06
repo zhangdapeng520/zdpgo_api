@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
 	"zdpgo_gin/examples/z17_user/routers"
 )
 

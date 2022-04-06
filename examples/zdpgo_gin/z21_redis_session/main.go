@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gin-contrib/sessions"
-	"github.com/gin-gonic/gin"
+	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
 	"github.com/zhangdapeng520/zdpgo_gin"
 )
 

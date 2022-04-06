@@ -1,7 +1,7 @@
 package zdpgo_gin
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
 	"github.com/mojocn/base64Captcha"
 	"github.com/zhangdapeng520/zdpgo_code"
 )

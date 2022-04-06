@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
-	"github.com/gin-gonic/gin"
+	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
 )
 
 func main() {
@@ -22,7 +22,7 @@ func main() {
 	r.GET("/test", func(c *gin.Context) {
 		session := sessions.Default(c)
 		session.Set("count", 33)
-		
+
 		var count int
 		v := session.Get("count")
 		if v == nil {

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
 	"net/http"
 )
 

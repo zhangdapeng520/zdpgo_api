@@ -7,13 +7,13 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/locales/en"
 	"github.com/go-playground/locales/zh"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
 	en_translations "github.com/go-playground/validator/v10/translations/en"
 	zh_translations "github.com/go-playground/validator/v10/translations/zh"
+	"github.com/zhangdapeng520/zdpgo_gin/libs/gin/binding"
 )
 
 func (g *Gin) initTrans(locale string) (err error) {

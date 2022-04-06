@@ -3,8 +3,8 @@ package zdpgo_gin
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/zhangdapeng520/zdpgo_code"
+	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
 )
 
 // Response 响应

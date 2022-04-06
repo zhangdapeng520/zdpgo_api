@@ -5,7 +5,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-contrib/sessions/redis"
-	"github.com/gin-gonic/gin"
+	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/gorilla/websocket"
 	"github.com/zhangdapeng520/zdpgo_mysql"

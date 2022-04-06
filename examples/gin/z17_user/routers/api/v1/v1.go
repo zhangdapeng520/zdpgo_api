@@ -1,6 +1,6 @@
 package v1
 
-import "github.com/gin-gonic/gin"
+import "github.com/zhangdapeng520/zdpgo_gin/libs/gin"
 
 var (
 	v1 *gin.RouterGroup

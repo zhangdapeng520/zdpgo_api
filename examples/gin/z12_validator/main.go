@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
+	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
 )
 
 // 绑定为json

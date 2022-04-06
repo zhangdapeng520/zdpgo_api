@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/gin-gonic/gin"
+	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
 )
 
 type Person struct {

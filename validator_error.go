@@ -3,7 +3,7 @@ package zdpgo_gin
 import (
 	"strings"
 
-	"github.com/gin-gonic/gin"
+	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/zhangdapeng520/zdpgo_code"
 )

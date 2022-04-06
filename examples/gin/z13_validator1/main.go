@@ -6,8 +6,8 @@ import (
 
 	zdp_validator "zdpgo_gin/validator"
 
-	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
+	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
+	"github.com/zhangdapeng520/zdpgo_gin/libs/gin/binding"
 	"github.com/go-playground/validator/v10"
 )
 
