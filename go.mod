@@ -8,6 +8,7 @@ require (
 	github.com/golang/protobuf v1.5.0
 	github.com/leodido/go-urn v1.2.1
 	github.com/mattn/go-isatty v0.0.14
+	github.com/stretchr/testify v1.6.1
 	github.com/ugorji/go/codec v1.2.7
 	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3
 	golang.org/x/text v0.3.7
@@ -15,6 +16,8 @@ require (
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	golang.org/x/sys v0.0.0-20210806184541-e5e7981a1069 // indirect
 	google.golang.org/protobuf v1.26.0 // indirect
+	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
 )
