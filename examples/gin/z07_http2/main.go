@@ -39,5 +39,6 @@ func main() {
 	})
 
 	// 启动服务 https://127.0.0.1:8080
+	// 启动服务 https://127.0.0.1:8080/welcome
 	r.RunTLS(":8080", "examples/gin/z07_http2/testdata/server.pem", "examples/gin/z07_http2/testdata/server.key")
 }
