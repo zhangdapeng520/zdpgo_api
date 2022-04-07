@@ -10,8 +10,8 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/zhangdapeng520/zdpgo_gin/libs/gin/internal/bytesconv"
-	"github.com/zhangdapeng520/zdpgo_gin/libs/gin/internal/json"
+	"github.com/zhangdapeng520/zdpgo_api/libs/gin/internal/bytesconv"
+	"github.com/zhangdapeng520/zdpgo_api/libs/gin/internal/json"
 )
 
 // JSON contains the given interface object.

@@ -9,7 +9,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/zhangdapeng520/zdpgo_gin/libs/gin/internal/json"
+	"github.com/zhangdapeng520/zdpgo_api/libs/gin/internal/json"
 )
 
 // ErrorType is an unsigned 64-bit error code as defined in the gin spec.

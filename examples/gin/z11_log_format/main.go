@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
+	"github.com/zhangdapeng520/zdpgo_api/libs/gin"
 )
 
 func main() {

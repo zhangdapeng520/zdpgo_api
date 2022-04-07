@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
 	"github.com/sirupsen/logrus"
+	"github.com/zhangdapeng520/zdpgo_api/libs/gin"
 	"os"
 	"path"
 	"time"

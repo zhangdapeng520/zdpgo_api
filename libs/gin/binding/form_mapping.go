@@ -12,8 +12,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/zhangdapeng520/zdpgo_gin/libs/gin/internal/bytesconv"
-	"github.com/zhangdapeng520/zdpgo_gin/libs/gin/internal/json"
+	"github.com/zhangdapeng520/zdpgo_api/libs/gin/internal/bytesconv"
+	"github.com/zhangdapeng520/zdpgo_api/libs/gin/internal/json"
 )
 
 var errUnknownType = errors.New("unknown type")

@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/zhangdapeng520/zdpgo_gin/libs/gin/internal/bytesconv"
+	"github.com/zhangdapeng520/zdpgo_api/libs/gin/internal/bytesconv"
 )
 
 // AuthUserKey is the cookie name for user credential in basic auth.

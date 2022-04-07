@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/zhangdapeng520/zdpgo_gin/libs/gin/internal/bytesconv"
+	"github.com/zhangdapeng520/zdpgo_api/libs/gin/internal/bytesconv"
 )
 
 // String contains the given interface object slice and its format.

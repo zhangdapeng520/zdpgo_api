@@ -4,11 +4,11 @@ import (
 	"net/http"
 	"time"
 
-	zdp_validator "zdpgo_gin/validator"
+	zdp_validator "zdpgo_api/validator"
 
-	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
-	"github.com/zhangdapeng520/zdpgo_gin/libs/gin/binding"
 	"github.com/go-playground/validator/v10"
+	"github.com/zhangdapeng520/zdpgo_api/libs/gin"
+	"github.com/zhangdapeng520/zdpgo_api/libs/gin/binding"
 )
 
 // Booking contains binded and validated data.

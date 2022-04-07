@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
+	"github.com/zhangdapeng520/zdpgo_api/libs/gin"
 )
 
 var once sync.Once

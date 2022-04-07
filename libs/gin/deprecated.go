@@ -7,7 +7,7 @@ package gin
 import (
 	"log"
 
-	"github.com/zhangdapeng520/zdpgo_gin/libs/gin/binding"
+	"github.com/zhangdapeng520/zdpgo_api/libs/gin/binding"
 )
 
 // BindWith binds the passed struct pointer using the specified binding engine.

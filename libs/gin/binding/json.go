@@ -10,7 +10,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/zhangdapeng520/zdpgo_gin/libs/gin/internal/json"
+	"github.com/zhangdapeng520/zdpgo_api/libs/gin/internal/json"
 )
 
 // EnableDecoderUseNumber is used to call the UseNumber method on the JSON

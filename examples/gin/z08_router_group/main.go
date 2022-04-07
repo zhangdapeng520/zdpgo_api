@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/zhangdapeng520/zdpgo_gin/libs/gin"
+	"github.com/zhangdapeng520/zdpgo_api/libs/gin"
 )
 
 func pong(c *gin.Context) {

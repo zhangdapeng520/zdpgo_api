@@ -8,7 +8,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/zhangdapeng520/zdpgo_gin/libs/gin/binding"
+	"github.com/zhangdapeng520/zdpgo_api/libs/gin/binding"
 )
 
 // EnvGinMode indicates environment name for gin mode.
