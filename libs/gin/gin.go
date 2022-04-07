@@ -65,8 +65,9 @@ const (
 	PlatformCloudflare = "CF-Connecting-IP"
 )
 
-// Engine is the framework's instance, it contains the muxer, middleware and configuration settings.
-// Create an instance of Engine, by using New() or Default()
+// Engine 是框架的实例，它包含muxer、中间件和配置设置。
+// 使用New()方法和Default()方法可以创建Engine的实例
+// 注意：Engine可以被当成http.Handler使用
 type Engine struct {
 	RouterGroup
 

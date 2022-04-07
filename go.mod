@@ -13,6 +13,7 @@ require (
 	github.com/ugorji/go/codec v1.2.7
 	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3
 	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2
+	golang.org/x/sync v0.0.0-20190423024810-112230192c58
 	golang.org/x/text v0.3.7
 	google.golang.org/grpc v1.45.0
 )
