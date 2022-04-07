@@ -10,7 +10,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/go-playground/validator/v10"
+	"github.com/zhangdapeng520/zdpgo_api/libs/validator"
 )
 
 type defaultValidator struct {

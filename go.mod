@@ -3,7 +3,6 @@ module github.com/zhangdapeng520/zdpgo_api
 go 1.17
 
 require (
-	github.com/go-playground/validator/v10 v10.10.1
 	github.com/golang/protobuf v1.5.2
 	github.com/json-iterator/go v1.1.12
 	github.com/mattn/go-isatty v0.0.14
