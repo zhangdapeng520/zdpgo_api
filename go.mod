@@ -8,7 +8,6 @@ require (
 	github.com/mattn/go-isatty v0.0.14
 	github.com/sirupsen/logrus v1.8.1
 	github.com/ugorji/go/codec v1.2.7
-	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (

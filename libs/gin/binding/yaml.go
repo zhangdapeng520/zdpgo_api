@@ -9,7 +9,7 @@ import (
 	"io"
 	"net/http"
 
-	"gopkg.in/yaml.v2"
+	"github.com/zhangdapeng520/zdpgo_api/libs/yaml"
 )
 
 type yamlBinding struct{}
