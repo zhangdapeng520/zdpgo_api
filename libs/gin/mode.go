@@ -11,16 +11,13 @@ import (
 	"github.com/zhangdapeng520/zdpgo_api/libs/gin/binding"
 )
 
-// EnvGinMode indicates environment name for gin mode.
+// EnvGinMode GIN模式的环境变量名称
 const EnvGinMode = "GIN_MODE"
 
 const (
-	// DebugMode indicates gin mode is debug.
-	DebugMode = "debug"
-	// ReleaseMode indicates gin mode is release.
-	ReleaseMode = "release"
-	// TestMode indicates gin mode is test.
-	TestMode = "test"
+	DebugMode   = "debug"   // debug模式
+	ReleaseMode = "release" // 发布模式
+	TestMode    = "test"    // 测试模式
 )
 
 const (
@@ -29,32 +26,29 @@ const (
 	testCode
 )
 
-// DefaultWriter is the default io.Writer used by Gin for debug output and
-// middleware output like Logger() or Recovery().
-// Note that both Logger and Recovery provides custom ways to configure their
-// output io.Writer.
-// To support coloring in Windows use:
-// 		import "github.com/mattn/go-colorable"
-// 		gin.DefaultWriter = colorable.NewColorableStdout()
+// DefaultWriter 默认输出流
 var DefaultWriter io.Writer = os.Stdout
 
-// DefaultErrorWriter is the default io.Writer used by Gin to debug errors
+// DefaultErrorWriter 默认错误输出流
 var DefaultErrorWriter io.Writer = os.Stderr
 
 var ginMode = debugCode
 var modeName = DebugMode
 
+// 初始化方法
 func init() {
-	mode := os.Getenv(EnvGinMode)
-	SetMode(mode)
+	mode := os.Getenv(EnvGinMode) // 从环境变量中获取gin启动模式
+	SetMode(mode)                 // 设置gin的模式
 }
 
-// SetMode sets gin mode according to input string.
+// SetMode 设置gin的模式
 func SetMode(value string) {
+	// 默认使用debug模式
 	if value == "" {
 		value = DebugMode
 	}
 
+	// 设置不同的模式
 	switch value {
 	case DebugMode:
 		ginMode = debugCode
@@ -63,30 +57,29 @@ func SetMode(value string) {
 	case TestMode:
 		ginMode = testCode
 	default:
-		panic("gin mode unknown: " + value + " (available mode: debug release test)")
+		panic("错误的模式: " + value + " (仅支持: debug/release/est)")
 	}
 
+	// 返回模式名称
 	modeName = value
 }
 
-// DisableBindValidation closes the default validator.
+// DisableBindValidation 关闭默认的校验器
 func DisableBindValidation() {
 	binding.Validator = nil
 }
 
-// EnableJsonDecoderUseNumber sets true for binding.EnableDecoderUseNumber to
-// call the UseNumber method on the JSON Decoder instance.
+// EnableJsonDecoderUseNumber 为绑定设置true。允许DecodeRusEnumber在JSON解码器实例上调用UseNumber方法。
 func EnableJsonDecoderUseNumber() {
 	binding.EnableDecoderUseNumber = true
 }
 
-// EnableJsonDecoderDisallowUnknownFields sets true for binding.EnableDecoderDisallowUnknownFields to
-// call the DisallowUnknownFields method on the JSON Decoder instance.
+// EnableJsonDecoderDisallowUnknownFields 为绑定设置true。使EnableDecoderDisallowUnknowFields在JSON解码器实例上调用DisallowUnknowFields方法。
 func EnableJsonDecoderDisallowUnknownFields() {
 	binding.EnableDecoderDisallowUnknownFields = true
 }
 
-// Mode returns currently gin mode.
+// Mode 返回当前的gin模式
 func Mode() string {
 	return modeName
 }

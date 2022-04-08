@@ -47,12 +47,13 @@ func debugPrintLoadTemplate(tmpl *template.Template) {
 	}
 }
 
+// debug模式记录日志
 func debugPrint(format string, values ...interface{}) {
 	if IsDebugging() {
 		if !strings.HasSuffix(format, "\n") {
 			format += "\n"
 		}
-		fmt.Fprintf(DefaultWriter, "[GIN-debug] "+format, values...)
+		fmt.Fprintf(DefaultWriter, "[ZDPGO_API-debug] "+format, values...)
 	}
 }
 
@@ -73,10 +74,12 @@ func debugPrintWARNINGDefault() {
 	debugPrint(`[注意] 使用Logger和Recovery中间件，创建了一个Engine实例`)
 }
 
+// debug模式打印新建Engine注意信息
 func debugPrintWARNINGNew() {
 	debugPrint(`[注意] 以 "debug" 模式启动，生产模式请使用 "release" 模式。使用gin.SetMode(gin.ReleaseMode)进行切换。`)
 }
 
+// debug模式打印模板使用注意
 func debugPrintWARNINGSetHTMLTemplate() {
 	debugPrint(`[注意] 方法 SetHTMLTemplate() 不是线程安全的。建议只在初始化的时候使用一次。比如：
 	router := gin.Default()
@@ -84,10 +87,11 @@ func debugPrintWARNINGSetHTMLTemplate() {
 `)
 }
 
+// debug模式打印错误日志
 func debugPrintError(err error) {
 	if err != nil {
 		if IsDebugging() {
-			fmt.Fprintf(DefaultErrorWriter, "[GIN-debug] [ERROR] %v\n", err)
+			fmt.Fprintf(DefaultErrorWriter, "[ZDPGO_API-debug] [ERROR] %v\n", err)
 		}
 	}
 }
