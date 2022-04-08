@@ -3,7 +3,6 @@ module github.com/zhangdapeng520/zdpgo_api
 go 1.17
 
 require (
-	github.com/gin-gonic/examples v0.0.0-20220208061044-6c5e6ca7d974
 	github.com/go-playground/locales v0.14.0
 	github.com/go-playground/universal-translator v0.18.0
 	github.com/golang/protobuf v1.5.2

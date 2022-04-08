@@ -192,7 +192,7 @@ func New() *Engine {
 	return engine
 }
 
-// Default returns an Engine instance with the Logger and Recovery middleware already attached.
+// Default 返回默认的引擎对象，使用日志中间件和错误捕获中间件
 func Default() *Engine {
 	debugPrintWARNINGDefault()
 	engine := New()

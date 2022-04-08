@@ -47,7 +47,7 @@ func NoMethod(handlers ...gin.HandlerFunc) {
 	engine().NoMethod(handlers...)
 }
 
-// Group creates a new router group. You should add all the routes that have common middlewares or the same path prefix.
+// Group creates a new router group. You should add all the routes that have common middleware or the same path prefix.
 // For example, all the routes that use a common middleware for authorization could be grouped.
 func Group(relativePath string, handlers ...gin.HandlerFunc) *gin.RouterGroup {
 	return engine().Group(relativePath, handlers...)
@@ -118,7 +118,7 @@ func StaticFS(relativePath string, fs http.FileSystem) gin.IRoutes {
 	return engine().StaticFS(relativePath, fs)
 }
 
-// Use attaches a global middleware to the router. ie. the middlewares attached though Use() will be
+// Use attaches a global middleware to the router. ie. the middleware attached though Use() will be
 // included in the handlers chain for every single request. Even 404, 405, static files...
 // For example, this is the right place for a logger or error management middleware.
 func Use(middlewares ...gin.HandlerFunc) gin.IRoutes {

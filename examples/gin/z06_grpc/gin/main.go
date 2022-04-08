@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	pb "github.com/gin-gonic/examples/grpc/pb"
+	pb "github.com/zhangdapeng520/zdpgo_api/examples/gin/z06_grpc/pb"
 	"google.golang.org/grpc"
 )
 

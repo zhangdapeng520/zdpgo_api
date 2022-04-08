@@ -65,32 +65,22 @@ func getMinVer(v string) (uint64, error) {
 	return strconv.ParseUint(v[first+1:last], 10, 64)
 }
 
+// 调试模式打印注意
 func debugPrintWARNINGDefault() {
 	if v, e := getMinVer(runtime.Version()); e == nil && v <= ginSupportMinGoVer {
-		debugPrint(`[WARNING] Now Gin requires Go 1.13+.
-
-`)
+		debugPrint(`[注意] 要求Go的版本是 1.13+`)
 	}
-	debugPrint(`[WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
-
-`)
+	debugPrint(`[注意] 使用Logger和Recovery中间件，创建了一个Engine实例`)
 }
 
 func debugPrintWARNINGNew() {
-	debugPrint(`[WARNING] Running in "debug" mode. Switch to "release" mode in production.
- - using env:	export GIN_MODE=release
- - using code:	gin.SetMode(gin.ReleaseMode)
-
-`)
+	debugPrint(`[注意] 以 "debug" 模式启动，生产模式请使用 "release" 模式。使用gin.SetMode(gin.ReleaseMode)进行切换。`)
 }
 
 func debugPrintWARNINGSetHTMLTemplate() {
-	debugPrint(`[WARNING] Since SetHTMLTemplate() is NOT thread-safe. It should only be called
-at initialization. ie. before any route is registered or the router is listening in a socket:
-
+	debugPrint(`[注意] 方法 SetHTMLTemplate() 不是线程安全的。建议只在初始化的时候使用一次。比如：
 	router := gin.Default()
-	router.SetHTMLTemplate(template) // << good place
-
+	router.SetHTMLTemplate(template)
 `)
 }
 

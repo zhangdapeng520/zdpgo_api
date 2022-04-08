@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/zhangdapeng520/zdpgo_api"
 	"net/http"
 
 	"github.com/zhangdapeng520/zdpgo_api/libs/gin"
@@ -11,9 +12,8 @@ var db = make(map[string]string)
 
 // 设置路由
 func setupRouter() *gin.Engine {
-	// Disable Console Color
-	// gin.DisableConsoleColor()
-	r := gin.Default()
+	// 创建服务
+	r := zdpgo_api.NewGinWithLog(true)
 
 	// GET ping路由
 	r.GET("/ping", func(c *gin.Context) {
@@ -62,6 +62,6 @@ func setupRouter() *gin.Engine {
 
 func main() {
 	r := setupRouter()
-	// 监听地址 0.0.0.0:8080
+	// 监听地址 http://localhost:8080/ping?a=111&b=222#abc
 	r.Run(":8080")
 }

@@ -53,7 +53,7 @@ func (group *RouterGroup) Use(middleware ...HandlerFunc) IRoutes {
 	return group.returnObj()
 }
 
-// Group creates a new router group. You should add all the routes that have common middlewares or the same path prefix.
+// Group creates a new router group. You should add all the routes that have common middleware or the same path prefix.
 // For example, all the routes that use a common middleware for authorization could be grouped.
 func (group *RouterGroup) Group(relativePath string, handlers ...HandlerFunc) *RouterGroup {
 	return &RouterGroup{
