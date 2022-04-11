@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"time"
@@ -150,7 +151,7 @@ var defaultLogFormatter = func(param LogFormatterParams) string {
 	// 默认格式
 	return fmt.Sprintf("[ZDPGO_API] %v |%s %3d %s| %13v | %15s |%s %-7s %s %#v\n%s",
 		param.TimeStamp.Format("2006-01-02 15:04:05"), // 日期时间
-		statusColor, param.StatusCode, resetColor,     // 状态码
+		statusColor, param.StatusCode, resetColor, // 状态码
 		param.Latency,                         // 消耗时间
 		param.ClientIP,                        // 客户端IP
 		methodColor, param.Method, resetColor, // HTTP方法
@@ -176,16 +177,24 @@ var detailLogFormatter = func(param LogFormatterParams) string {
 	// 详细日志格式
 	jsonHeaderData, _ := json.Marshal(param.Request.Header)
 	jsonFormData, _ := json.Marshal(param.Request.PostForm)
-	detailFormat := fmt.Sprintf("[ZDPGO_API] %v |%s %3d %s| %13v | %15s |%s %-7s %s %#v\n请求头信息：%s \nForm表单信息：%s \nBody主体信息：%s\n错误信息：%s\n\n",
+
+	// 传递的JSON数据
+	body, err := ioutil.ReadAll(param.Request.Body)
+	if err != nil {
+		fmt.Printf("读取JSON数据失败：%v\n", err)
+	}
+	jsonBody := string(body)
+
+	detailFormat := fmt.Sprintf("[ZDPGO_API] %v |%s %3d %s| %13v | %15s |%s %-7s %s %#v\n请求头信息：%s \nForm表单信息：%s \nBody主体信息：%s\n错误信息：%s\n\n\n",
 		param.TimeStamp.Format("2006-01-02 15:04:05"), // 日期时间
-		statusColor, param.StatusCode, resetColor,     // 状态码
+		statusColor, param.StatusCode, resetColor, // 状态码
 		param.Latency,                         // 消耗时间
 		param.ClientIP,                        // 客户端IP
 		methodColor, param.Method, resetColor, // HTTP方法
 		param.Path,         // 请求路径
 		jsonHeaderData,     // 请求头信息
 		jsonFormData,       // 表单信息
-		param.Request.Body, // 主体信息
+		jsonBody,           // 主体信息
 		param.ErrorMessage, // 错误消息
 	)
 
