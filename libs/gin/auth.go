@@ -1,7 +1,3 @@
-// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
-// Use of this source code is governed by a MIT style
-// license that can be found in the LICENSE file.
-
 package gin
 
 import (
@@ -13,19 +9,16 @@ import (
 	"github.com/zhangdapeng520/zdpgo_api/libs/gin/internal/bytesconv"
 )
 
-// AuthUserKey is the cookie name for user credential in basic auth.
-const AuthUserKey = "user"
-
-// Accounts defines a key/value for user/pass list of authorized logins.
-type Accounts map[string]string
-
-type authPair struct {
+const AuthUserKey = "user"      // AuthUserKey 是基本身份验证中用户凭据的cookie名称。
+type Accounts map[string]string // Accounts 定义用户名和密码的键值对
+type authPair struct {          // 权限对
 	value string
 	user  string
 }
 
 type authPairs []authPair
 
+// 查询权限
 func (a authPairs) searchCredential(authValue string) (string, bool) {
 	if authValue == "" {
 		return "", false
@@ -38,10 +31,9 @@ func (a authPairs) searchCredential(authValue string) (string, bool) {
 	return "", false
 }
 
-// BasicAuthForRealm returns a Basic HTTP Authorization middleware. It takes as arguments a map[string]string where
-// the key is the user name and the value is the password, as well as the name of the Realm.
-// If the realm is empty, "Authorization Required" will be used by default.
-// (see http://tools.ietf.org/html/rfc2617#section-1.2)
+// BasicAuthForRealm 返回HTTP Basic校验中间件。
+// 它将map[string]字符串作为参数，其中键是用户名，值是密码，以及域的名称。
+// 如果域为空，默认情况下将使用“需要授权”。
 func BasicAuthForRealm(accounts Accounts, realm string) HandlerFunc {
 	if realm == "" {
 		realm = "Authorization Required"
@@ -49,27 +41,26 @@ func BasicAuthForRealm(accounts Accounts, realm string) HandlerFunc {
 	realm = "Basic realm=" + strconv.Quote(realm)
 	pairs := processAccounts(accounts)
 	return func(c *Context) {
-		// Search user in the slice of allowed credentials
+		// 查询允许通过的权限用户
 		user, found := pairs.searchCredential(c.requestHeader("Authorization"))
 		if !found {
-			// Credentials doesn't match, we return 401 and abort handlers chain.
+			// 权益校验失败
 			c.Header("WWW-Authenticate", realm)
 			c.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
 
-		// The user credentials was found, set user's id to key AuthUserKey in this context, the user's id can be read later using
-		// c.MustGet(gin.AuthUserKey).
+		// 如果找到了用户凭据，请将用户id设置为key AuthUserKey。在此上下文中，可以稍后使用 c.MustGet(gin.AuthUserKey).
 		c.Set(AuthUserKey, user)
 	}
 }
 
-// BasicAuth returns a Basic HTTP Authorization middleware. It takes as argument a map[string]string where
-// the key is the user name and the value is the password.
+// BasicAuth 返回HTTP权限校验中间件，只允许给定的账户列表通过请求
 func BasicAuth(accounts Accounts) HandlerFunc {
 	return BasicAuthForRealm(accounts, "")
 }
 
+// 处理账户列表
 func processAccounts(accounts Accounts) authPairs {
 	length := len(accounts)
 	assert1(length > 0, "Empty list of authorized credentials")
@@ -85,6 +76,7 @@ func processAccounts(accounts Accounts) authPairs {
 	return pairs
 }
 
+// 生成Basic权限校验请求头
 func authorizationHeader(user, password string) string {
 	base := user + ":" + password
 	return "Basic " + base64.StdEncoding.EncodeToString(bytesconv.StringToBytes(base))

@@ -1,7 +1,3 @@
-// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
-// Use of this source code is governed by a MIT style
-// license that can be found in the LICENSE file.
-
 package gin
 
 import (
@@ -25,7 +21,7 @@ import (
 	"github.com/zhangdapeng520/zdpgo_api/libs/sse"
 )
 
-// Content-Type MIME of the most common data formats.
+// Content-Type MIME 通用数据格式
 const (
 	MIMEJSON              = binding.MIMEJSON
 	MIMEHTML              = binding.MIMEHTML
@@ -37,13 +33,12 @@ const (
 	MIMEYAML              = binding.MIMEYAML
 )
 
-// BodyBytesKey indicates a default body bytes key.
-const BodyBytesKey = "_gin-gonic/gin/bodybyteskey"
+// BodyBytesKey 指示默认的Body字节键。
+const BodyBytesKey = "github.com/zhangdapeng520/zdpgo_api"
 
 const abortIndex int8 = math.MaxInt8 / 2
 
-// Context is the most important part of gin. It allows us to pass variables between middleware,
-// manage the flow, validate the JSON of a request and render a JSON response for example.
+// Context 是gin最重要的部分。例如，它允许我们在中间件之间传递变量、管理流、验证请求的JSON和呈现JSON响应。
 type Context struct {
 	writermem responseWriter
 	Request   *http.Request
@@ -58,27 +53,25 @@ type Context struct {
 	params       *Params
 	skippedNodes *[]skippedNode
 
-	// This mutex protect Keys map
+	// 用户保证Keys的线程安全
 	mu sync.RWMutex
 
-	// Keys is a key/value pair exclusively for the context of each request.
+	// Keys 是每次请求的key/value键值对
 	Keys map[string]interface{}
 
-	// Errors is a list of errors attached to all the handlers/middleware who used this context.
+	// Errors 错误消息列表
 	Errors errorMsgs
 
-	// Accepted defines a list of manually accepted formats for content negotiation.
+	// Accepted 定义手动接受的内容协商格式列表。
 	Accepted []string
 
 	// queryCache use url.ParseQuery cached the param query result from c.Request.URL.Query()
 	queryCache url.Values
 
-	// formCache use url.ParseQuery cached PostForm contains the parsed form data from POST, PATCH,
-	// or PUT body parameters.
+	// formCache use url.ParseQuery cached PostForm contains the parsed form data from POST, PATCH, or PUT body parameters.
 	formCache url.Values
 
-	// SameSite allows a server to define a cookie attribute making it impossible for
-	// the browser to send this cookie along with cross-site requests.
+	// SameSite 允许服务器定义cookie属性，使浏览器无法将此cookie与跨站点请求一起发送。
 	sameSite http.SameSite
 }
 
@@ -102,8 +95,8 @@ func (c *Context) reset() {
 	*c.skippedNodes = (*c.skippedNodes)[:0]
 }
 
-// Copy returns a copy of the current context that can be safely used outside the request's scope.
-// This has to be used when the context has to be passed to a goroutine.
+// Copy 返回可在请求范围外安全使用的当前上下文的副本。
+// 当必须将上下文传递给goroutine时，必须使用此选项。
 func (c *Context) Copy() *Context {
 	cp := Context{
 		writermem: c.writermem,

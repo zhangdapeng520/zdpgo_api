@@ -71,53 +71,34 @@ const (
 type Engine struct {
 	RouterGroup
 
-	// Enables automatic redirection if the current route can't be matched but a
-	// handler for the path with (without) the trailing slash exists.
-	// For example if /foo/ is requested but a route only exists for /foo, the
-	// client is redirected to /foo with http status code 301 for GET requests
-	// and 307 for all other request methods.
+	// 如果当前路由无法匹配，但存在带有（不带）尾随斜杠的路径的处理程序，则启用自动重定向。
+	// 比如请求了 /foo/ 但是只存在 /foo 路由, 会自动重定向到/foo
 	RedirectTrailingSlash bool
 
-	// If enabled, the router tries to fix the current request path, if no
-	// handle is registered for it.
-	// First superfluous path elements like ../ or // are removed.
-	// Afterwards the router does a case-insensitive lookup of the cleaned path.
-	// If a handle can be found for this route, the router makes a redirection
-	// to the corrected path with status code 301 for GET requests and 307 for
-	// all other request methods.
-	// For example /FOO and /..//Foo could be redirected to /foo.
-	// RedirectTrailingSlash is independent of this option.
+	// 如果开启，路由会尝试修复当前请求路径。
 	RedirectFixedPath bool
 
-	// If enabled, the router checks if another method is allowed for the
-	// current route, if the current request can not be routed.
-	// If this is the case, the request is answered with 'Method Not Allowed'
-	// and HTTP status code 405.
-	// If no other Method is allowed, the request is delegated to the NotFound
-	// handler.
+	// 如果启用，路由器将检查当前路由是否允许其他方法，以及当前请求是否无法路由。
+	// 如果是这种情况，则会使用“不允许使用方法”和HTTP状态代码405来响应请求。
+	// 如果不允许使用其他方法，则将请求委托给NotFound处理程序。
 	HandleMethodNotAllowed bool
 
-	// If enabled, client IP will be parsed from the request's headers that
-	// match those stored at `(*gin.Engine).RemoteIPHeaders`. If no IP was
-	// fetched, it falls back to the IP obtained from
-	// `(*gin.Context).Request.RemoteAddr`.
+	// 如果启用，客户端IP将从与存储在“（*gin.Engine）的请求头匹配的请求头中解析。RemoteIPHeaders`。
+	// 如果没有获取IP，则返回到从“（*gin.Context）获取的IP。要求RemoteAddr`。
 	ForwardedByClientIP bool
 
-	// DEPRECATED: USE `TrustedPlatform` WITH VALUE `gin.GoogleAppEngine` INSTEAD
-	// #726 #755 If enabled, it will trust some headers starting with
-	// 'X-AppEngine...' for better integration with that PaaS.
+	// 不推荐：使用'TrustedPlatform'和'gin'值。
+	// GoogleAppEngine`相反#726#755如果启用，它将信任一些以“X-AppEngine…”开头的标题为了更好地与PaaS集成。
 	AppEngine bool
 
-	// If enabled, the url.RawPath will be used to find parameters.
+	// 如果启用，则返回url。RawPath将用于查找参数。
 	UseRawPath bool
 
-	// If true, the path value will be unescaped.
-	// If UseRawPath is false (by default), the UnescapePathValues effectively is true,
-	// as url.Path gonna be used, which is already unescaped.
+	// 如果为true，则路径值将被取消扫描。
+	// 如果UseRawPath为false（默认情况下），则UnescapePathValues为true，如url。将要使用的路径，已经没有了。
 	UnescapePathValues bool
 
-	// RemoveExtraSlash a parameter can be parsed from the URL even with extra slashes.
-	// See the PR #1817 and issue #1644
+	// RemoveExtraSlash 即使使用额外的斜杠，也可以从URL解析参数。
 	RemoveExtraSlash bool
 
 	// List of headers used to obtain the client IP when
