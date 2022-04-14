@@ -69,7 +69,7 @@ const (
 // 使用New()方法和Default()方法可以创建Engine的实例
 // 注意：Engine可以被当成http.Handler使用
 type Engine struct {
-	RouterGroup
+	RouterGroup // 路由组
 
 	// 如果当前路由无法匹配，但存在带有（不带）尾随斜杠的路径的处理程序，则启用自动重定向。
 	// 比如请求了 /foo/ 但是只存在 /foo 路由, 会自动重定向到/foo
@@ -253,9 +253,7 @@ func (engine *Engine) NoMethod(handlers ...HandlerFunc) {
 	engine.rebuild405Handlers()
 }
 
-// Use attaches a global middleware to the router. ie. the middleware attached though Use() will be
-// included in the handlers chain for every single request. Even 404, 405, static files...
-// For example, this is the right place for a logger or error management middleware.
+// Use 添加一个全局的中间件
 func (engine *Engine) Use(middleware ...HandlerFunc) IRoutes {
 	engine.RouterGroup.Use(middleware...)
 	engine.rebuild404Handlers()

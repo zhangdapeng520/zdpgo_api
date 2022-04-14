@@ -36,8 +36,7 @@ type IRoutes interface {
 	StaticFS(string, http.FileSystem) IRoutes
 }
 
-// RouterGroup is used internally to configure router, a RouterGroup is associated with
-// a prefix and an array of handlers (middleware).
+// RouterGroup 用于配置路由，路由组下的路径具备相同的前缀
 type RouterGroup struct {
 	Handlers HandlersChain
 	basePath string
@@ -47,7 +46,7 @@ type RouterGroup struct {
 
 var _ IRouter = &RouterGroup{}
 
-// Use adds middleware to the group, see example code in GitHub.
+// Use 为路由分组添加中间件
 func (group *RouterGroup) Use(middleware ...HandlerFunc) IRoutes {
 	group.Handlers = append(group.Handlers, middleware...)
 	return group.returnObj()
