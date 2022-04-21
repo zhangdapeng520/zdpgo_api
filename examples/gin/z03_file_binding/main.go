@@ -20,7 +20,7 @@ func main() {
 	// Set a lower memory limit for multipart forms (default is 32 MiB)
 	router.MaxMultipartMemory = 8 << 20 // 8 MiB
 	router.Static("/", "./public")
-	router.POST("/upload", func(c *gin.Context) {
+	router.POST("/uploads", func(c *gin.Context) {
 		var bindFile BindFile
 
 		// Bind file
@@ -33,7 +33,7 @@ func main() {
 		file := bindFile.File
 		dst := filepath.Base(file.Filename)
 		if err := c.SaveUploadedFile(file, dst); err != nil {
-			c.String(http.StatusBadRequest, fmt.Sprintf("upload file err: %s", err.Error()))
+			c.String(http.StatusBadRequest, fmt.Sprintf("uploads file err: %s", err.Error()))
 			return
 		}
 

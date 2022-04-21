@@ -3,9 +3,6 @@
 
 项目地址：https://github.com/zhangdapeng520/zdpgo_api
 
-## 功能清单
-- 根据MySQL数据库表自动生成REST风格的CRUD API接口
-
 ## 版本历史
 - 版本1.0.0：2022年2月9日
 - 版本1.0.1：2022年2月11日 指定默认模板目录template和默认静态文件夹目录static
@@ -20,63 +17,30 @@
 - 版本1.1.0：2022年3月12日 修复日志不打印body
 - 版本1.1.1：2022年4月8日 新增详细日志
 - 版本1.1.2：2022年4月11日 详细日志升级，支持查看的具体Body中的JSON数据
+- 版本1.1.3：2022年4月21日 文件上传
 
 ## 示例
-### 根据MySQL数据库表自动生成REST风格的CRUD API接口
-会自动生成以下接口：
-- 根据ID查询数据
-- 新增数据
-- 批量新增数据
-- 根据ID修改数据
-- 根据ID列表修改数据
-- 根据ID删除数据
-- 根据ID列表删除数据
-- 根据ID列表查询数据
-- 根据分页查询数据
-
-```shell
+### 文件上传
+```go
 package main
 
 import (
+	"fmt"
+	"github.com/zhangdapeng520/zdpgo_api/core/router"
 	"github.com/zhangdapeng520/zdpgo_api/libs/gin"
-	"github.com/zhangdapeng520/zdpgo_api"
-	"github.com/zhangdapeng520/zdpgo_mysql"
+	"mime/multipart"
+	"net/http"
 )
 
-type Student struct {
-	Id     int64  `json:"id"`
-	Name   string `json:"name"`
-	Age    int    `json:"age"`
-	Gender bool   `json:"gender"`
-}
-
 func main() {
-	// 创建核心对象
-	g := zdpgo_api.New(zdpgo_api.GinConfig{
-		Debug: true,
-	})
-
-	// 设置MySQL
-	g.SetMysql(zdpgo_mysql.MysqlConfig{
-		Debug:    true,
-		Host:     "192.168.33.101",
-		Port:     3306,
-		Username: "root",
-		Password: "root",
-		Database: "test",
-	})
-
-	// 创建app
 	app := gin.Default()
-
-	// 创建路由组
-	group := app.Group("/api/v1")
-
-	// 注册路由
-	var students []Student
-	g.RegisterCrudRouter(group, "student", &students)
-
-	// 启动app
-	app.Run("0.0.0.0:8888")
+	router.Upload(app, 8, "/upload", "file", "./uploads", func(c *gin.Context, file *multipart.FileHeader, err error) {
+		if err != nil {
+			c.String(http.StatusBadRequest, fmt.Sprintf("文件上传失败: %s", err.Error()))
+			return
+		}
+		c.String(http.StatusOK, fmt.Sprintf("文件 %s 上传成功 ", file.Filename))
+	})
+	app.Run(":8888")
 }
 ```
