@@ -50,7 +50,7 @@ func BasicAuthForRealm(accounts Accounts, realm string) HandlerFunc {
 			return
 		}
 
-		// 如果找到了用户凭据，请将用户id设置为key AuthUserKey。在此上下文中，可以稍后使用 c.MustGet(gin.AuthUserKey).
+		// 如果找到了用户凭据，请将用户id设置为key AuthUserKey。在此上下文中，可以稍后使用 c.MustGet(api.AuthUserKey).
 		c.Set(AuthUserKey, user)
 	}
 }

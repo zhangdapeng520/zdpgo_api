@@ -30,7 +30,7 @@ var defaultPlatform string
 
 var defaultTrustedCIDRs = []*net.IPNet{{IP: net.IP{0x0, 0x0, 0x0, 0x0}, Mask: net.IPMask{0x0, 0x0, 0x0, 0x0}}} // 0.0.0.0/0
 
-// HandlerFunc defines the handler used by gin middleware as return value.
+// HandlerFunc defines the handler used by api middleware as return value.
 type HandlerFunc func(*Context)
 
 // HandlersChain defines a HandlerFunc array.
@@ -87,7 +87,7 @@ type Engine struct {
 	// 如果没有获取IP，则返回到从“（*gin.Context）获取的IP。要求RemoteAddr`。
 	ForwardedByClientIP bool
 
-	// 不推荐：使用'TrustedPlatform'和'gin'值。
+	// 不推荐：使用'TrustedPlatform'和'api'值。
 	// GoogleAppEngine`相反#726#755如果启用，它将信任一些以“X-AppEngine…”开头的标题为了更好地与PaaS集成。
 	AppEngine bool
 
@@ -107,7 +107,7 @@ type Engine struct {
 	// network origins of list defined by `(*gin.Engine).SetTrustedProxies()`.
 	RemoteIPHeaders []string
 
-	// If set to a constant of value gin.Platform*, trusts the headers set by
+	// If set to a constant of value api.Platform*, trusts the headers set by
 	// that platform, for example to determine the client IP
 	TrustedPlatform string
 
@@ -328,7 +328,7 @@ func (engine *Engine) Run(addr ...string) (err error) {
 
 	if engine.isUnsafeTrustedProxies() {
 		debugPrint("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
-			"Please check https://pkg.go.dev/github.com/zhangdapeng520/zdpgo_api/gin#readme-don-t-trust-all-proxies for details.")
+			"Please check https://pkg.go.dev/github.com/zhangdapeng520/zdpgo_api/api#readme-don-t-trust-all-proxies for details.")
 	}
 
 	address := resolveAddress(addr)
@@ -414,7 +414,7 @@ func (engine *Engine) RunTLS(addr, certFile, keyFile string) (err error) {
 
 	if engine.isUnsafeTrustedProxies() {
 		debugPrint("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
-			"Please check https://pkg.go.dev/github.com/zhangdapeng520/zdpgo_api/gin#readme-don-t-trust-all-proxies for details.")
+			"Please check https://pkg.go.dev/github.com/zhangdapeng520/zdpgo_api/api#readme-don-t-trust-all-proxies for details.")
 	}
 
 	err = http.ListenAndServeTLS(addr, certFile, keyFile, engine)
@@ -430,7 +430,7 @@ func (engine *Engine) RunUnix(file string) (err error) {
 
 	if engine.isUnsafeTrustedProxies() {
 		debugPrint("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
-			"Please check https://pkg.go.dev/github.com/zhangdapeng520/zdpgo_api/gin#readme-don-t-trust-all-proxies for details.")
+			"Please check https://pkg.go.dev/github.com/zhangdapeng520/zdpgo_api/api#readme-don-t-trust-all-proxies for details.")
 	}
 
 	listener, err := net.Listen("unix", file)
@@ -453,7 +453,7 @@ func (engine *Engine) RunFd(fd int) (err error) {
 
 	if engine.isUnsafeTrustedProxies() {
 		debugPrint("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
-			"Please check https://pkg.go.dev/github.com/zhangdapeng520/zdpgo_api/gin#readme-don-t-trust-all-proxies for details.")
+			"Please check https://pkg.go.dev/github.com/zhangdapeng520/zdpgo_api/api#readme-don-t-trust-all-proxies for details.")
 	}
 
 	f := os.NewFile(uintptr(fd), fmt.Sprintf("fd@%d", fd))
@@ -474,7 +474,7 @@ func (engine *Engine) RunListener(listener net.Listener) (err error) {
 
 	if engine.isUnsafeTrustedProxies() {
 		debugPrint("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
-			"Please check https://pkg.go.dev/github.com/zhangdapeng520/zdpgo_api/gin#readme-don-t-trust-all-proxies for details.")
+			"Please check https://pkg.go.dev/github.com/zhangdapeng520/zdpgo_api/api#readme-don-t-trust-all-proxies for details.")
 	}
 
 	err = http.Serve(listener, engine)

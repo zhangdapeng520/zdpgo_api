@@ -10,14 +10,14 @@ package json
 import "encoding/json"
 
 var (
-	// Marshal is exported by gin/json package.
+	// Marshal is exported by api/json package.
 	Marshal = json.Marshal
-	// Unmarshal is exported by gin/json package.
+	// Unmarshal is exported by api/json package.
 	Unmarshal = json.Unmarshal
-	// MarshalIndent is exported by gin/json package.
+	// MarshalIndent is exported by api/json package.
 	MarshalIndent = json.MarshalIndent
-	// NewDecoder is exported by gin/json package.
+	// NewDecoder is exported by api/json package.
 	NewDecoder = json.NewDecoder
-	// NewEncoder is exported by gin/json package.
+	// NewEncoder is exported by api/json package.
 	NewEncoder = json.NewEncoder
 )

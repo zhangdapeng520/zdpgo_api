@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	pb "github.com/zhangdapeng520/zdpgo_api/examples/z06_grpc/pb"
+	"github.com/zhangdapeng520/zdpgo_api"
+	pb "github.com/zhangdapeng520/zdpgo_api/examples/grpc/pb"
 	"github.com/zhangdapeng520/zdpgo_api/gin"
+	"google.golang.org/grpc"
 	"log"
 	"net/http"
-
-	"google.golang.org/grpc"
 )
 
 func getGrpcClient() pb.GreeterClient {
@@ -25,15 +25,15 @@ func getGrpcClient() pb.GreeterClient {
 	return client
 }
 
-func getRouter() *gin.Engine {
+func main() {
 	// 创建服务
-	r := gin.Default()
+	api := zdpgo_api.NewWithConfig(zdpgo_api.Config{Debug: true})
 
 	// 获取grpc客户端
 	client := getGrpcClient()
 
 	// 监听路径
-	r.GET("/rest/n/:name", func(c *gin.Context) {
+	api.App.GET("/rest/n/:name", func(c *gin.Context) {
 
 		// 获取名字
 		name := c.Param("name")
@@ -56,15 +56,7 @@ func getRouter() *gin.Engine {
 		})
 	})
 
-	return r
-}
-
-func main() {
-	// 获取router
-	r := getRouter()
-
 	// 启动服务
-	if err := r.Run(":8052"); err != nil {
-		log.Fatalf("启动服务失败: %v", err)
-	}
+	// 测试：http://127.0.0.1:3333/rest/n/zhangdapeng
+	api.Run()
 }

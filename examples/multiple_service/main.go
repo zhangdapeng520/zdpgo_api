@@ -13,7 +13,7 @@ var (
 	g errgroup.Group
 )
 
-// 路由1：注意，*gin.Engine可以被当成http.Handler使用
+// 路由1：注意，*api.Engine可以被当成http.Handler使用
 func router01() http.Handler {
 	// 创建服务
 	e := gin.New()

@@ -76,13 +76,13 @@ func debugPrintWARNINGDefault() {
 
 // debug模式打印新建Engine注意信息
 func debugPrintWARNINGNew() {
-	debugPrint(`[注意] 以 "debug" 模式启动，生产模式请使用 "release" 模式。使用gin.SetMode(gin.ReleaseMode)进行切换。`)
+	debugPrint(`[注意] 以 "debug" 模式启动，生产模式请使用 "release" 模式。使用gin.SetMode(api.ReleaseMode)进行切换。`)
 }
 
 // debug模式打印模板使用注意
 func debugPrintWARNINGSetHTMLTemplate() {
 	debugPrint(`[注意] 方法 SetHTMLTemplate() 不是线程安全的。建议只在初始化的时候使用一次。比如：
-	router := gin.Default()
+	router := api.Default()
 	router.SetHTMLTemplate(template)
 `)
 }

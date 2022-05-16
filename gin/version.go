@@ -4,5 +4,5 @@
 
 package gin
 
-// Version is the current gin framework's version.
+// Version is the current api framework's version.
 const Version = "v1.7.7"

@@ -15,14 +15,14 @@ import (
 )
 
 // BindKey indicates a default bind key.
-const BindKey = "_gin-gonic/gin/bindkey"
+const BindKey = "_gin-gonic/api/bindkey"
 
 // Bind is a helper function for given interface object and returns a Gin middleware.
 func Bind(val interface{}) HandlerFunc {
 	value := reflect.ValueOf(val)
 	if value.Kind() == reflect.Ptr {
 		panic(`Bind struct can not be a pointer. Example:
-	Use: gin.Bind(Struct{}) instead of gin.Bind(&Struct{})
+	Use: api.Bind(Struct{}) instead of api.Bind(&Struct{})
 `)
 	}
 	typ := value.Type()

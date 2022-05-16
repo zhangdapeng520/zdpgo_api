@@ -12,7 +12,7 @@ import (
 	"github.com/zhangdapeng520/zdpgo_api/gin/internal/json"
 )
 
-// ErrorType is an unsigned 64-bit error code as defined in the gin spec.
+// ErrorType is an unsigned 64-bit error code as defined in the api spec.
 type ErrorType uint64
 
 const (

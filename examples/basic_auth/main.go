@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/zhangdapeng520/zdpgo_api"
 	"github.com/zhangdapeng520/zdpgo_api/gin"
 )
 
@@ -22,16 +23,14 @@ func getSecrets(c *gin.Context) {
 }
 
 func main() {
-	r := gin.Default()
+	api := zdpgo_api.NewWithConfig(zdpgo_api.Config{Debug: true})
 
-	// 创建路由分组，并使用基础权限校验中间件
-	authorized := r.Group("/admin", gin.BasicAuth(gin.Accounts{
-		"zhangdapeng": "zhangdapeng", //用户名：密码
-	}))
+	// 创建权限校验路由分组
+	authorized := api.GetBasicAuthGroup("/admin", map[string]string{"zhangdapeng": "zhangdapeng"})
 
 	// 校验接口
 	authorized.GET("/secrets", getSecrets)
 
-	// 启动服务。访问：http://localhost:8080/admin/secrets
-	r.Run(":8080")
+	// 启动服务。访问：http://localhost:3333/admin/secrets
+	api.Run()
 }
