@@ -1,7 +1,7 @@
 package main
 
 import (
-	pb "github.com/zhangdapeng520/zdpgo_api/examples/gin/z06_grpc/pb"
+	pb "github.com/zhangdapeng520/zdpgo_api/examples/z06_grpc/pb"
 	"log"
 	"net"
 

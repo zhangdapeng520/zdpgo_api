@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
+	pb "github.com/zhangdapeng520/zdpgo_api/examples/z06_grpc/pb"
 	"github.com/zhangdapeng520/zdpgo_api/gin"
 	"log"
 	"net/http"
 
-	pb "github.com/zhangdapeng520/zdpgo_api/examples/gin/z06_grpc/pb"
 	"google.golang.org/grpc"
 )
 
