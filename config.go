@@ -9,8 +9,9 @@ package zdpgo_api
 */
 
 type Config struct {
-	Debug       bool   `yaml:"debug" json:"debug"`                 // 是否为debug模式
-	LogFilePath string `yaml:"log_file_path" json:"log_file_path"` // 日志路径
-	Host        string `yaml:"host" json:"host"`                   // 启动地址，默认0.0.0.0
-	Port        int    `yaml:"port" json:"port"`                   // 启动端口号，默认3333
+	Debug          bool   `yaml:"debug" json:"debug"`                       // 是否为debug模式
+	LogFilePath    string `yaml:"log_file_path" json:"log_file_path"`       // 日志路径
+	Host           string `yaml:"host" json:"host"`                         // 启动地址，默认0.0.0.0
+	Port           int    `yaml:"port" json:"port"`                         // 启动端口号，默认3333
+	UploadFileSize int64  `yaml:"upload_file_size" json:"upload_file_size"` // 上传文件大小限制（M），默认33
 }

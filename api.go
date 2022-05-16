@@ -41,6 +41,9 @@ func NewWithConfig(config Config) *Api {
 	if config.Port == 0 {
 		config.Port = 3333
 	}
+	if config.UploadFileSize == 0 {
+		config.UploadFileSize = 33
+	}
 	a.Config = &config
 
 	// App
@@ -50,6 +53,9 @@ func NewWithConfig(config Config) *Api {
 		a.App = gin.Default()
 		gin.SetMode(gin.ReleaseMode)
 	}
+
+	// 设置上传文件大小
+	a.App.MaxMultipartMemory = config.UploadFileSize << 20
 
 	// 返回对象
 	return a
