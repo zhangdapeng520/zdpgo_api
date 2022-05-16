@@ -11,33 +11,27 @@ import (
 var db = make(map[string]string)
 
 // 设置路由
-func setupRouter() *gin.Engine {
-	// 创建服务
-	r := zdpgo_api.NewGinWithLog(true)
+func setupRouter() *zdpgo_api.Api {
+	api := zdpgo_api.NewWithConfig(zdpgo_api.Config{
+		Debug: true,
+	})
 
 	// GET ping路由
-	r.GET("/ping", func(c *gin.Context) {
+	api.App.GET("/ping", func(c *gin.Context) {
 		c.String(http.StatusOK, "pong")
 	})
 
 	// Get 用户名
-	r.GET("/user/:name", func(c *gin.Context) {
+	api.App.GET("/user/:name", func(c *gin.Context) {
 		// 获取路径参数
 		user := c.Params.ByName("name")
 
-		// 判断是否已存在
-		value, ok := db[user]
-
 		// 返回
-		if ok {
-			c.JSON(http.StatusOK, gin.H{"user": user, "value": value})
-		} else {
-			c.JSON(http.StatusOK, gin.H{"user": user, "status": "no value"})
-		}
+		c.JSON(http.StatusOK, gin.H{"user": user})
 	})
 
 	// 基本的权限校验路由
-	authorized := r.Group("/", gin.BasicAuth(gin.Accounts{
+	authorized := api.App.Group("/", gin.BasicAuth(gin.Accounts{
 		"foo":  "bar", // user:foo password:bar
 		"manu": "123", // user:manu password:123
 	}))
@@ -57,11 +51,12 @@ func setupRouter() *gin.Engine {
 		}
 	})
 
-	return r
+	return api
 }
 
 func main() {
 	r := setupRouter()
-	// 监听地址 http://localhost:8080/ping?a=111&b=222#abc
-	r.Run(":8080")
+	// 监听地址 http://localhost:3333/ping?a=111&b=222#abc
+	// 监听地址 http://localhost:3333/user/zhangdapeng
+	r.Run()
 }
