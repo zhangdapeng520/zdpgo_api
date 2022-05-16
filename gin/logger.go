@@ -1,12 +1,9 @@
-// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
-// Use of this source code is governed by a MIT style
-// license that can be found in the LICENSE file.
-
 package gin
 
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/zhangdapeng520/zdpgo_log"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -15,6 +12,15 @@ import (
 
 	"github.com/mattn/go-isatty"
 )
+
+// Log 核心日志对象
+var Log *zdpgo_log.Log
+
+func init() {
+	if Log == nil {
+		Log = zdpgo_log.NewWithDebug(true, "logs/zdpgo/zdpgo_api.log")
+	}
+}
 
 type consoleColorModeValue int
 
@@ -228,9 +234,8 @@ func ErrorLoggerT(typ ErrorType) HandlerFunc {
 	}
 }
 
-// Logger instances a Logger middleware that will write the logs to gin.DefaultWriter.
-// By default gin.DefaultWriter = os.Stdout.
-func Logger() HandlerFunc {
+// Logger 日志中间件
+func Logger1() HandlerFunc {
 	return LoggerWithConfig(LoggerConfig{})
 }
 
@@ -250,7 +255,27 @@ func LoggerWithWriter(out io.Writer, notlogged ...string) HandlerFunc {
 	})
 }
 
-// LoggerWithConfig 根据配置返回一个logger日志中间件
+// Logger 根据配置返回一个logger日志中间件
+func Logger() HandlerFunc {
+	return func(c *Context) {
+		// 通过请求
+		c.Next()
+
+		// 输出日志
+		Log.Debug("ZDP-Go-Api调试日志",
+			"client_ip", c.ClientIP(),
+			"method", c.Request.Method,
+			"path", c.Request.URL.String(),
+			"status_code", c.Writer.Status(),
+			"header", c.Request.Header,
+			"form", c.Request.PostForm,
+			"body", c.Request.Body,
+			"body_size", c.Writer.Size(),
+			"error", c.Errors.ByType(ErrorTypePrivate).String(),
+		)
+	}
+}
+
 func LoggerWithConfig(conf LoggerConfig) HandlerFunc {
 	// 格式化
 	formatter := conf.Formatter

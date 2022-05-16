@@ -8,7 +8,6 @@ require (
 	github.com/golang/protobuf v1.5.2
 	github.com/leodido/go-urn v1.2.1
 	github.com/mattn/go-isatty v0.0.14
-	github.com/stretchr/testify v1.7.0
 	github.com/ugorji/go/codec v1.2.7
 	github.com/zhangdapeng520/zdpgo_log v1.3.4
 	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3

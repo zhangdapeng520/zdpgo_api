@@ -33,6 +33,7 @@ func NewWithConfig(config Config) *Api {
 		config.LogFilePath = "logs/zdpgo/zdpgo_api.log"
 	}
 	a.Log = zdpgo_log.NewWithDebug(config.Debug, config.LogFilePath)
+	gin.Log = a.Log
 
 	// 配置
 	if config.Host == "" {
@@ -48,7 +49,7 @@ func NewWithConfig(config Config) *Api {
 
 	// App
 	if config.Debug {
-		a.App = NewGinWithLog(true)
+		a.App = gin.Default()
 	} else {
 		a.App = gin.Default()
 		gin.SetMode(gin.ReleaseMode)
