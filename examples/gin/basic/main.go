@@ -4,7 +4,7 @@ import (
 	"github.com/zhangdapeng520/zdpgo_api"
 	"net/http"
 
-	"github.com/zhangdapeng520/zdpgo_api/libs/gin"
+	"github.com/zhangdapeng520/zdpgo_api/gin"
 )
 
 // 模拟数据库

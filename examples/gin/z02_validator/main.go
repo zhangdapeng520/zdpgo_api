@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/zhangdapeng520/zdpgo_api/libs/gin"
-	"github.com/zhangdapeng520/zdpgo_api/libs/gin/binding"
-	"github.com/zhangdapeng520/zdpgo_api/libs/validator"
+	"github.com/zhangdapeng520/zdpgo_api/gin"
+	"github.com/zhangdapeng520/zdpgo_api/gin/binding"
+	"github.com/zhangdapeng520/zdpgo_api/validator"
 )
 
 // Booking 图书预订，包含绑定数据和校验数据

@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/zhangdapeng520/zdpgo_api/libs/gin"
+	"github.com/zhangdapeng520/zdpgo_api/gin"
 )
 
 type BindFile struct {

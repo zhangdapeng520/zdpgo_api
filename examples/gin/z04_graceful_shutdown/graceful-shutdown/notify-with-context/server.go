@@ -4,7 +4,7 @@ package main
 
 import (
 	"context"
-	"github.com/zhangdapeng520/zdpgo_api/libs/gin"
+	"github.com/zhangdapeng520/zdpgo_api/gin"
 	"log"
 	"net/http"
 	"os/signal"

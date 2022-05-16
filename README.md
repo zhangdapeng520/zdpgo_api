@@ -27,7 +27,7 @@ package main
 import (
 	"fmt"
 	"github.com/zhangdapeng520/zdpgo_api/core/router"
-	"github.com/zhangdapeng520/zdpgo_api/libs/gin"
+	"github.com/zhangdapeng520/zdpgo_api/gin"
 	"mime/multipart"
 	"net/http"
 )

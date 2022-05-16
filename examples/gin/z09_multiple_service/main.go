@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/zhangdapeng520/zdpgo_api/libs/gin"
+	"github.com/zhangdapeng520/zdpgo_api/gin"
 	"log"
 	"net/http"
 	"time"

@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/zhangdapeng520/zdpgo_api/core/util"
-	"github.com/zhangdapeng520/zdpgo_api/libs/gin"
+	"github.com/zhangdapeng520/zdpgo_api/gin"
 	"mime/multipart"
 	"path"
 	"path/filepath"

@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/zhangdapeng520/zdpgo_api/core/util"
-	"github.com/zhangdapeng520/zdpgo_api/libs/gin"
+	"github.com/zhangdapeng520/zdpgo_api/gin"
 	"net/http"
 	"path/filepath"
 )

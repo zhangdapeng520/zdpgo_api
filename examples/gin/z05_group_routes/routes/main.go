@@ -1,6 +1,6 @@
 package routes
 
-import "github.com/zhangdapeng520/zdpgo_api/libs/gin"
+import "github.com/zhangdapeng520/zdpgo_api/gin"
 
 // Run 启动服务
 func Run() {
