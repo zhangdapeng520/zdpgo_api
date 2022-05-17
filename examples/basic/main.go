@@ -4,12 +4,14 @@ import (
 	"embed"
 	"github.com/zhangdapeng520/zdpgo_api"
 	"net/http"
-
-	"github.com/zhangdapeng520/zdpgo_api/gin"
 )
 
-// 模拟数据库
-var db = make(map[string]string)
+func ping(c *zdpgo_api.Context) {
+	c.JSON(http.StatusOK, zdpgo_api.JsonMap{
+		"code":    10000,
+		"message": "success",
+	})
+}
 
 // 设置路由
 func setupRouter() *zdpgo_api.Api {
@@ -17,39 +19,22 @@ func setupRouter() *zdpgo_api.Api {
 		Debug: true,
 	})
 
-	// GET ping路由
-	api.App.GET("/ping", func(c *gin.Context) {
-		c.String(http.StatusOK, "pong")
-	})
-
-	// Get 用户名
-	api.App.GET("/user/:name", func(c *gin.Context) {
-		// 获取路径参数
-		user := c.Params.ByName("name")
-
-		// 返回
-		c.JSON(http.StatusOK, gin.H{"user": user})
-	})
+	// 常用方法 ping路由
+	api.Get("/ping", ping)
+	api.Post("/ping", ping)
+	api.Put("/ping", ping)
+	api.Delete("/ping", ping)
+	api.Patch("/ping", ping)
 
 	// 基本的权限校验路由
-	authorized := api.App.Group("/", gin.BasicAuth(gin.Accounts{
-		"foo":  "bar", // user:foo password:bar
-		"manu": "123", // user:manu password:123
-	}))
+	authorized := api.GetBasicAuthGroup("/", zdpgo_api.StringMap{
+		"zhangdapeng": "zhangdapeng",
+	})
 
 	// POST请求
-	authorized.POST("admin", func(c *gin.Context) {
-		user := c.MustGet(gin.AuthUserKey).(string)
-
-		// Parse JSON
-		var json struct {
-			Value string `json:"value" binding:"required"`
-		}
-
-		if c.Bind(&json) == nil {
-			db[user] = json.Value
-			c.JSON(http.StatusOK, gin.H{"status": "ok"})
-		}
+	authorized.Get("/admin", func(c *zdpgo_api.Context) {
+		user := c.MustGet(zdpgo_api.AuthUserKey).(string)
+		c.JSON(http.StatusOK, zdpgo_api.JsonMap{"status": user})
 	})
 
 	return api
@@ -70,5 +55,6 @@ func main() {
 	// 监听地址 http://localhost:3333/static/test1.jpg
 	// 监听地址 http://localhost:3333/fs/uploads/test1.jpg
 	// 监听地址 http://localhost:3333/fs/downloads/test1.jpg
+	// 监听地址 http://localhost:3333/admin
 	r.Run()
 }

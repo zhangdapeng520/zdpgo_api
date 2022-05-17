@@ -907,7 +907,7 @@ func (c *Context) Cookie(name string) (string, error) {
 	return val, nil
 }
 
-// Render writes the response headers and calls render.Render to render data.
+// Render 写入响应头并调用render.Render渲染数据
 func (c *Context) Render(code int, r render.Render) {
 	c.Status(code)
 
@@ -917,6 +917,7 @@ func (c *Context) Render(code int, r render.Render) {
 		return
 	}
 
+	// 渲染数据
 	if err := r.Render(c.Writer); err != nil {
 		panic(err)
 	}

@@ -26,13 +26,13 @@ var defaultPlatform string
 
 var defaultTrustedCIDRs = []*net.IPNet{{IP: net.IP{0x0, 0x0, 0x0, 0x0}, Mask: net.IPMask{0x0, 0x0, 0x0, 0x0}}} // 0.0.0.0/0
 
-// HandlerFunc defines the handler used by api middleware as return value.
+// HandlerFunc API处理方法类型
 type HandlerFunc func(*Context)
 
-// HandlersChain defines a HandlerFunc array.
+// HandlersChain API处理方法类型数组
 type HandlersChain []HandlerFunc
 
-// Last returns the last handler in the chain. ie. the last handler is the main one.
+// Last 返回API处理方法类型的最后一个方法
 func (c HandlersChain) Last() HandlerFunc {
 	if length := len(c); length > 0 {
 		return c[length-1]
@@ -40,25 +40,21 @@ func (c HandlersChain) Last() HandlerFunc {
 	return nil
 }
 
-// RouteInfo represents a request route's specification which contains method and path and its handler.
+// RouteInfo 路由信息
 type RouteInfo struct {
-	Method      string
-	Path        string
-	Handler     string
-	HandlerFunc HandlerFunc
+	Method      string      // 方法名
+	Path        string      // 路径
+	Handler     string      // 处理器
+	HandlerFunc HandlerFunc // 处理方法
 }
 
-// RoutesInfo defines a RouteInfo array.
+// RoutesInfo 路由信息数组
 type RoutesInfo []RouteInfo
 
-// Trusted platforms
+// 信任的平台
 const (
-	// When running on Google App Engine. Trust X-Appengine-Remote-Addr
-	// for determining the client's IP
-	PlatformGoogleAppEngine = "X-Appengine-Remote-Addr"
-	// When using Cloudflare's CDN. Trust CF-Connecting-IP for determining
-	// the client's IP
-	PlatformCloudflare = "CF-Connecting-IP"
+	PlatformGoogleAppEngine = "X-Appengine-Remote-Addr" // Google App Engine
+	PlatformCloudflare      = "CF-Connecting-IP"        // Cloudflare's CDN.
 )
 
 // Engine 是框架的实例，它包含muxer、中间件和配置设置。
@@ -129,16 +125,8 @@ type Engine struct {
 
 var _ IRouter = &Engine{}
 
-// New returns a new blank Engine instance without any middleware attached.
-// By default the configuration is:
-// - RedirectTrailingSlash:  true
-// - RedirectFixedPath:      false
-// - HandleMethodNotAllowed: false
-// - ForwardedByClientIP:    true
-// - UseRawPath:             false
-// - UnescapePathValues:     true
+// New 创建一个Engine实例
 func New() *Engine {
-	//debugPrintWARNINGNew()
 	engine := &Engine{
 		RouterGroup: RouterGroup{
 			Handlers: nil,
@@ -386,17 +374,12 @@ func (engine *Engine) parseTrustedProxies() error {
 	return err
 }
 
-// parseIP parse a string representation of an IP and returns a net.IP with the
-// minimum byte representation or nil if input is invalid.
+// parseIP 解析IP地址，得到net.IP对象
 func parseIP(ip string) net.IP {
 	parsedIP := net.ParseIP(ip)
-
 	if ipv4 := parsedIP.To4(); ipv4 != nil {
-		// return ip in a 4-byte representation
 		return ipv4
 	}
-
-	// return ip in a 16-byte representation or nil
 	return parsedIP
 }
 
@@ -404,12 +387,11 @@ func parseIP(ip string) net.IP {
 // It is a shortcut for http.ListenAndServeTLS(addr, certFile, keyFile, router)
 // Note: this method will block the calling goroutine indefinitely unless an error happens.
 func (engine *Engine) RunTLS(addr, certFile, keyFile string) (err error) {
-	Log.Debug("Listening and serving HTTPS on ", "addr", addr)
+	Log.Debug("启动HTTPS服务成功", "addr", addr)
 	defer func() { Log.Error(err.Error()) }()
 
 	if engine.isUnsafeTrustedProxies() {
-		Log.Debug("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
-			"Please check https://pkg.go.dev/github.com/zhangdapeng520/zdpgo_api/api#readme-don-t-trust-all-proxies for details.")
+		Log.Debug("注意：不安全的代理，请留意HOST的安全性。")
 	}
 
 	err = http.ListenAndServeTLS(addr, certFile, keyFile, engine)
@@ -420,12 +402,11 @@ func (engine *Engine) RunTLS(addr, certFile, keyFile string) (err error) {
 // through the specified unix socket (ie. a file).
 // Note: this method will block the calling goroutine indefinitely unless an error happens.
 func (engine *Engine) RunUnix(file string) (err error) {
-	Log.Debug("Listening and serving HTTP on unix", "file", file)
+	Log.Debug("启动HTTP服务成功", "file", file)
 	defer func() { Log.Error(err.Error()) }()
 
 	if engine.isUnsafeTrustedProxies() {
-		Log.Debug("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
-			"Please check https://pkg.go.dev/github.com/zhangdapeng520/zdpgo_api/api#readme-don-t-trust-all-proxies for details.")
+		Log.Debug("注意：不安全的代理，请留意HOST的安全性。")
 	}
 
 	listener, err := net.Listen("unix", file)
@@ -443,12 +424,11 @@ func (engine *Engine) RunUnix(file string) (err error) {
 // through the specified file descriptor.
 // Note: this method will block the calling goroutine indefinitely unless an error happens.
 func (engine *Engine) RunFd(fd int) (err error) {
-	Log.Debug("Listening and serving HTTP on fd@", "fd", fd)
+	Log.Debug("启动HTTP服务成功", "fd", fd)
 	defer func() { Log.Error(err.Error()) }()
 
 	if engine.isUnsafeTrustedProxies() {
-		Log.Debug("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
-			"Please check https://pkg.go.dev/github.com/zhangdapeng520/zdpgo_api/api#readme-don-t-trust-all-proxies for details.")
+		Log.Debug("注意：不安全的代理，请留意HOST的安全性。")
 	}
 
 	f := os.NewFile(uintptr(fd), fmt.Sprintf("fd@%d", fd))
@@ -464,12 +444,11 @@ func (engine *Engine) RunFd(fd int) (err error) {
 // RunListener attaches the router to a http.Server and starts listening and serving HTTP requests
 // through the specified net.Listener
 func (engine *Engine) RunListener(listener net.Listener) (err error) {
-	Log.Debug("Listening and serving HTTP on listener what's bind with address@%s", "address", listener.Addr())
+	Log.Debug("启动HTTP服务成功", "address", listener.Addr())
 	defer func() { Log.Error(err.Error()) }()
 
 	if engine.isUnsafeTrustedProxies() {
-		Log.Debug("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
-			"Please check https://pkg.go.dev/github.com/zhangdapeng520/zdpgo_api/api#readme-don-t-trust-all-proxies for details.")
+		Log.Debug("注意：不安全的代理，请留意HOST的安全性。")
 	}
 
 	err = http.Serve(listener, engine)
@@ -571,7 +550,7 @@ func serveError(c *Context, code int, defaultMessage []byte) {
 		c.writermem.Header()["Content-Type"] = mimePlain
 		_, err := c.Writer.Write(defaultMessage)
 		if err != nil {
-			Log.Debug("cannot write message to writer during serve error: %v", "errror", err)
+			Log.Error("写入数据失败", "error", err)
 		}
 		return
 	}
@@ -612,7 +591,7 @@ func redirectRequest(c *Context) {
 	if req.Method != http.MethodGet {
 		code = http.StatusTemporaryRedirect
 	}
-	Log.Debug("redirecting request %d: %s --> %s", "code", code, "rPath", rPath, "rURL", rURL)
+	Log.Debug("请求被重定向", "code", code, "rPath", rPath, "rURL", rURL)
 	http.Redirect(c.Writer, req, rURL, code)
 	c.writermem.WriteHeaderNow()
 }

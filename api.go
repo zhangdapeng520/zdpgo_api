@@ -33,7 +33,8 @@ func NewWithConfig(config Config) *Api {
 		config.LogFilePath = "logs/zdpgo/zdpgo_api.log"
 	}
 	a.Log = zdpgo_log.NewWithDebug(config.Debug, config.LogFilePath)
-	gin.Log = a.Log
+	gin.Log = a.Log // gin日志对象
+	Log = a.Log     // 全局日志对象
 
 	// 配置
 	if config.Host == "" {
