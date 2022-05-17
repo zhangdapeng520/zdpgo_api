@@ -2,7 +2,9 @@ package zdpgo_api
 
 import (
 	"github.com/zhangdapeng520/zdpgo_api/gin"
+	"io/fs"
 	"mime/multipart"
+	"net/http"
 	"path"
 	"path/filepath"
 )
@@ -66,4 +68,14 @@ func (a *Api) AddUploadRouter(
 		// 处理返回结果
 		handleResultFunc(c, file, err)
 	})
+}
+
+// AddStaticRouter 添加静态文件目录
+func (a *Api) AddStaticRouter(routerPath string, dirPath string) {
+	a.App.StaticFS(routerPath, http.Dir(dirPath))
+}
+
+// AddStaticFSRouter 添加嵌入式文件系统作为静态目录
+func (a *Api) AddStaticFSRouter(routerPath string, fsObj fs.FS) {
+	a.App.StaticFS(routerPath, http.FS(fsObj))
 }

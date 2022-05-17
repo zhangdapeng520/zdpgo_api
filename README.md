@@ -18,7 +18,9 @@
 - v1.1.1  2022/4/8   新增详细日志
 - v1.1.2  2022/4/11  详细日志升级，支持查看的具体Body中的JSON数据
 - v1.1.3  2022/4/21  文件上传
-- v1.1.4  2022/5/18  新增：Api核心对象
+- v1.1.4  2022/5/16  新增：Api核心对象
+- v1.1.5  2022/5/17  优化：日志中间件优化
+- v1.1.6  2022/5/17  新增：添加静态文件服务
 
 ## 示例
 ### 基本用法
@@ -26,6 +28,7 @@
 package main
 
 import (
+	"embed"
 	"github.com/zhangdapeng520/zdpgo_api"
 	"net/http"
 
@@ -79,10 +82,21 @@ func setupRouter() *zdpgo_api.Api {
 	return api
 }
 
+//go:embed uploads downloads
+var fsObj embed.FS
+
 func main() {
 	r := setupRouter()
+
+	// 添加静态目录
+	r.AddStaticRouter("/static", "./uploads")
+	r.AddStaticFSRouter("/fs", fsObj)
+
 	// 监听地址 http://localhost:3333/ping?a=111&b=222#abc
 	// 监听地址 http://localhost:3333/user/zhangdapeng
+	// 监听地址 http://localhost:3333/static/test1.jpg
+	// 监听地址 http://localhost:3333/fs/uploads/test1.jpg
+	// 监听地址 http://localhost:3333/fs/downloads/test1.jpg
 	r.Run()
 }
 ```
