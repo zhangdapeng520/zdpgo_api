@@ -9,10 +9,8 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"net"
 	"net/http"
-	"net/http/httputil"
 	"os"
 	"runtime"
 	"strings"
@@ -47,17 +45,14 @@ func RecoveryWithWriter(out io.Writer, recovery ...RecoveryFunc) HandlerFunc {
 	return CustomRecoveryWithWriter(out, defaultHandleRecovery)
 }
 
-// CustomRecoveryWithWriter returns a middleware for a given writer that recovers from any panics and calls the provided handle func to handle it.
+// CustomRecoveryWithWriter 自定义错误捕获输出中间件
 func CustomRecoveryWithWriter(out io.Writer, handle RecoveryFunc) HandlerFunc {
-	var logger *log.Logger
-	if out != nil {
-		logger = log.New(out, "\n\n\x1b[31m", log.LstdFlags)
-	}
 	return func(c *Context) {
 		defer func() {
 			if err := recover(); err != nil {
-				// Check for a broken connection, as it is not really a
-				// condition that warrants a panic stack trace.
+				Log.Error("捕获到程序运行错误", "error", err)
+
+				// 检测是否需要中断程序运行
 				var brokenPipe bool
 				if ne, ok := err.(*net.OpError); ok {
 					if se, ok := ne.Err.(*os.SyscallError); ok {
@@ -66,30 +61,10 @@ func CustomRecoveryWithWriter(out io.Writer, handle RecoveryFunc) HandlerFunc {
 						}
 					}
 				}
-				if logger != nil {
-					stack := stack(3)
-					httpRequest, _ := httputil.DumpRequest(c.Request, false)
-					headers := strings.Split(string(httpRequest), "\r\n")
-					for idx, header := range headers {
-						current := strings.Split(header, ":")
-						if current[0] == "Authorization" {
-							headers[idx] = current[0] + ": *"
-						}
-					}
-					headersToStr := strings.Join(headers, "\r\n")
-					if brokenPipe {
-						logger.Printf("%s\n%s%s", err, headersToStr, reset)
-					} else if IsDebugging() {
-						logger.Printf("[Recovery] %s panic recovered:\n%s\n%s\n%s%s",
-							timeFormat(time.Now()), headersToStr, err, stack, reset)
-					} else {
-						logger.Printf("[Recovery] %s panic recovered:\n%s\n%s%s",
-							timeFormat(time.Now()), err, stack, reset)
-					}
-				}
+
+				// 处理错误
 				if brokenPipe {
-					// If the connection is dead, we can't write a status to it.
-					c.Error(err.(error)) // nolint: errcheck
+					c.Error(err.(error))
 					c.Abort()
 				} else {
 					handle(c, err)

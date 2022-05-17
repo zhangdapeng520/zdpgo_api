@@ -35,6 +35,11 @@ var DefaultErrorWriter io.Writer = os.Stderr
 var ginMode = debugCode
 var modeName = DebugMode
 
+// IsDebugging 是否为Debug模式
+func IsDebugging() bool {
+	return ginMode == debugCode
+}
+
 // 初始化方法
 func init() {
 	mode := os.Getenv(EnvGinMode) // 从环境变量中获取gin启动模式

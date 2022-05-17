@@ -1,7 +1,3 @@
-// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
-// Use of this source code is governed by a MIT style
-// license that can be found in the LICENSE file.
-
 package gin
 
 import (
@@ -60,7 +56,8 @@ func (w *responseWriter) reset(writer http.ResponseWriter) {
 func (w *responseWriter) WriteHeader(code int) {
 	if code > 0 && w.status != code {
 		if w.Written() {
-			debugPrint("[WARNING] Headers were already written. Wanted to override status code %d with %d", w.status, code)
+			Log.Debug("[WARNING] Headers were already written. Wanted to override status code %d with %d", "status",
+				w.status, "code", code)
 		}
 		w.status = code
 	}

@@ -1,7 +1,3 @@
-// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
-// Use of this source code is governed by a MIT style
-// license that can be found in the LICENSE file.
-
 package gin
 
 import (
@@ -142,7 +138,7 @@ var _ IRouter = &Engine{}
 // - UseRawPath:             false
 // - UnescapePathValues:     true
 func New() *Engine {
-	debugPrintWARNINGNew()
+	//debugPrintWARNINGNew()
 	engine := &Engine{
 		RouterGroup: RouterGroup{
 			Handlers: nil,
@@ -175,7 +171,7 @@ func New() *Engine {
 
 // Default 返回默认的引擎对象，使用日志中间件和错误捕获中间件
 func Default() *Engine {
-	debugPrintWARNINGDefault()
+	Log.Debug("使用Logger和Recovery中间件，创建了一个App对象")
 	engine := New()
 	engine.Use(Logger(), Recovery())
 	return engine
@@ -207,7 +203,7 @@ func (engine *Engine) LoadHTMLGlob(pattern string) {
 	templ := template.Must(template.New("").Delims(left, right).Funcs(engine.FuncMap).ParseGlob(pattern))
 
 	if IsDebugging() {
-		debugPrintLoadTemplate(templ)
+		Log.Debug("模板", "templ", templ)
 		engine.HTMLRender = render.HTMLDebug{Glob: pattern, FuncMap: engine.FuncMap, Delims: engine.delims}
 		return
 	}
@@ -229,10 +225,6 @@ func (engine *Engine) LoadHTMLFiles(files ...string) {
 
 // SetHTMLTemplate associate a template with HTML renderer.
 func (engine *Engine) SetHTMLTemplate(templ *template.Template) {
-	if len(engine.trees) > 0 {
-		debugPrintWARNINGSetHTMLTemplate()
-	}
-
 	engine.HTMLRender = render.HTMLProduction{Template: templ.Funcs(engine.FuncMap)}
 }
 
@@ -269,12 +261,15 @@ func (engine *Engine) rebuild405Handlers() {
 	engine.allNoMethod = engine.combineHandlers(engine.noMethod)
 }
 
+// addRoute 添加路由
 func (engine *Engine) addRoute(method, path string, handlers HandlersChain) {
 	assert1(path[0] == '/', "path must begin with '/'")
 	assert1(method != "", "HTTP method can not be empty")
 	assert1(len(handlers) > 0, "there must be at least one handler")
 
-	debugPrintRoute(method, path, handlers)
+	// 打印路由
+	Log.Debug("添加路由成功", "method", method, "path", path)
+	//debugPrintRoute(method, path, handlers)
 
 	root := engine.trees.get(method)
 	if root == nil {
@@ -324,15 +319,15 @@ func iterate(path, method string, routes RoutesInfo, root *node) RoutesInfo {
 // It is a shortcut for http.ListenAndServe(addr, router)
 // Note: this method will block the calling goroutine indefinitely unless an error happens.
 func (engine *Engine) Run(addr ...string) (err error) {
-	defer func() { debugPrintError(err) }()
+	defer func() { Log.Error(err.Error()) }()
 
 	if engine.isUnsafeTrustedProxies() {
-		debugPrint("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
+		Log.Debug("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
 			"Please check https://pkg.go.dev/github.com/zhangdapeng520/zdpgo_api/api#readme-don-t-trust-all-proxies for details.")
 	}
 
 	address := resolveAddress(addr)
-	debugPrint("Listening and serving HTTP on %s\n", address)
+	Log.Debug("Listening and serving HTTP on ", "address", address)
 	err = http.ListenAndServe(address, engine)
 	return
 }
@@ -409,11 +404,11 @@ func parseIP(ip string) net.IP {
 // It is a shortcut for http.ListenAndServeTLS(addr, certFile, keyFile, router)
 // Note: this method will block the calling goroutine indefinitely unless an error happens.
 func (engine *Engine) RunTLS(addr, certFile, keyFile string) (err error) {
-	debugPrint("Listening and serving HTTPS on %s\n", addr)
-	defer func() { debugPrintError(err) }()
+	Log.Debug("Listening and serving HTTPS on ", "addr", addr)
+	defer func() { Log.Error(err.Error()) }()
 
 	if engine.isUnsafeTrustedProxies() {
-		debugPrint("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
+		Log.Debug("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
 			"Please check https://pkg.go.dev/github.com/zhangdapeng520/zdpgo_api/api#readme-don-t-trust-all-proxies for details.")
 	}
 
@@ -425,11 +420,11 @@ func (engine *Engine) RunTLS(addr, certFile, keyFile string) (err error) {
 // through the specified unix socket (ie. a file).
 // Note: this method will block the calling goroutine indefinitely unless an error happens.
 func (engine *Engine) RunUnix(file string) (err error) {
-	debugPrint("Listening and serving HTTP on unix:/%s", file)
-	defer func() { debugPrintError(err) }()
+	Log.Debug("Listening and serving HTTP on unix", "file", file)
+	defer func() { Log.Error(err.Error()) }()
 
 	if engine.isUnsafeTrustedProxies() {
-		debugPrint("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
+		Log.Debug("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
 			"Please check https://pkg.go.dev/github.com/zhangdapeng520/zdpgo_api/api#readme-don-t-trust-all-proxies for details.")
 	}
 
@@ -448,11 +443,11 @@ func (engine *Engine) RunUnix(file string) (err error) {
 // through the specified file descriptor.
 // Note: this method will block the calling goroutine indefinitely unless an error happens.
 func (engine *Engine) RunFd(fd int) (err error) {
-	debugPrint("Listening and serving HTTP on fd@%d", fd)
-	defer func() { debugPrintError(err) }()
+	Log.Debug("Listening and serving HTTP on fd@", "fd", fd)
+	defer func() { Log.Error(err.Error()) }()
 
 	if engine.isUnsafeTrustedProxies() {
-		debugPrint("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
+		Log.Debug("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
 			"Please check https://pkg.go.dev/github.com/zhangdapeng520/zdpgo_api/api#readme-don-t-trust-all-proxies for details.")
 	}
 
@@ -469,11 +464,11 @@ func (engine *Engine) RunFd(fd int) (err error) {
 // RunListener attaches the router to a http.Server and starts listening and serving HTTP requests
 // through the specified net.Listener
 func (engine *Engine) RunListener(listener net.Listener) (err error) {
-	debugPrint("Listening and serving HTTP on listener what's bind with address@%s", listener.Addr())
-	defer func() { debugPrintError(err) }()
+	Log.Debug("Listening and serving HTTP on listener what's bind with address@%s", "address", listener.Addr())
+	defer func() { Log.Error(err.Error()) }()
 
 	if engine.isUnsafeTrustedProxies() {
-		debugPrint("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
+		Log.Debug("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
 			"Please check https://pkg.go.dev/github.com/zhangdapeng520/zdpgo_api/api#readme-don-t-trust-all-proxies for details.")
 	}
 
@@ -576,7 +571,7 @@ func serveError(c *Context, code int, defaultMessage []byte) {
 		c.writermem.Header()["Content-Type"] = mimePlain
 		_, err := c.Writer.Write(defaultMessage)
 		if err != nil {
-			debugPrint("cannot write message to writer during serve error: %v", err)
+			Log.Debug("cannot write message to writer during serve error: %v", "errror", err)
 		}
 		return
 	}
@@ -617,7 +612,7 @@ func redirectRequest(c *Context) {
 	if req.Method != http.MethodGet {
 		code = http.StatusTemporaryRedirect
 	}
-	debugPrint("redirecting request %d: %s --> %s", code, rPath, rURL)
+	Log.Debug("redirecting request %d: %s --> %s", "code", code, "rPath", rPath, "rURL", rURL)
 	http.Redirect(c.Writer, req, rURL, code)
 	c.writermem.WriteHeaderNow()
 }
