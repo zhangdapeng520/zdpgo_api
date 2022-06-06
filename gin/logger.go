@@ -21,15 +21,10 @@ func Logger() HandlerFunc {
 
 		// 输出日志
 		Log.Debug("ZDP-Go-Api调试日志",
-			"client_ip", c.ClientIP(),
 			"method", c.Request.Method,
 			"path", c.Request.URL.String(),
 			"status_code", c.Writer.Status(),
 			"header", c.Request.Header,
-			"form", c.Request.PostForm,
-			"body", c.Request.Body,
-			"body_size", c.Writer.Size(),
-			"error", c.Errors.ByType(ErrorTypePrivate).String(),
 		)
 	}
 }

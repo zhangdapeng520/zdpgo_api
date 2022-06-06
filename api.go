@@ -4,28 +4,30 @@ import (
 	"context"
 	"fmt"
 	"github.com/zhangdapeng520/zdpgo_api/gin"
+	"github.com/zhangdapeng520/zdpgo_log"
+	"github.com/zhangdapeng520/zdpgo_password"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 )
-import "github.com/zhangdapeng520/zdpgo_log"
 
 // Api API核心对象
 type Api struct {
-	Config *Config        // 配置对象
-	Log    *zdpgo_log.Log // 日志对象
-	App    *gin.Engine    // 核心App对象
+	Config   *Config                  // 配置对象
+	Log      *zdpgo_log.Log           // 日志对象
+	App      *gin.Engine              // 核心App对象
+	Password *zdpgo_password.Password // 密码加密
 }
 
 // New 使用默认配置创建API
 func New() *Api {
-	return NewWithConfig(Config{})
+	return NewWithConfig(&Config{})
 }
 
 // NewWithConfig 根据配置创建API
-func NewWithConfig(config Config) *Api {
+func NewWithConfig(config *Config) *Api {
 	a := &Api{}
 
 	// 日志
@@ -46,7 +48,7 @@ func NewWithConfig(config Config) *Api {
 	if config.UploadFileSize == 0 {
 		config.UploadFileSize = 33
 	}
-	a.Config = &config
+	a.Config = config
 
 	// App
 	if config.Debug {
@@ -58,6 +60,17 @@ func NewWithConfig(config Config) *Api {
 
 	// 设置上传文件大小
 	a.App.MaxMultipartMemory = config.UploadFileSize << 20
+
+	// 加密对象
+	a.Password = zdpgo_password.NewWithConfig(&zdpgo_password.Config{
+		Debug:       config.Debug,
+		LogFilePath: config.LogFilePath,
+		EccKey: zdpgo_password.Key{
+			PrivateKey: config.Ecc.PrivateKey,
+			PublicKey:  config.Ecc.PublicKey,
+		},
+	})
+	Password = a.Password
 
 	// 返回对象
 	return a
