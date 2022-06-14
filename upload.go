@@ -1,8 +1,11 @@
 package zdpgo_api
 
 import (
-	"github.com/zhangdapeng520/zdpgo_api/gin"
+	"crypto/md5"
+	"encoding/base64"
+	"encoding/hex"
 	"io/fs"
+	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"path"
@@ -17,6 +20,12 @@ import (
 @Description: add_router添加路由相关
 */
 
+// GetMd5 获取MD5值
+func (a *Api) GetMd5(data string) string {
+	r := md5.Sum([]byte(data))
+	return hex.EncodeToString(r[:])
+}
+
 // AddUploadRouter 添加文件上传路由
 // @param routerPath 路由路径，比如：/upload
 // @param fileName 上传文件的表单名称，比如：file
@@ -26,19 +35,41 @@ func (a *Api) AddUploadRouter(
 	routerPath string,
 	fileName string,
 	saveDir string,
-	handleResultList ...func(c *gin.Context, file *multipart.FileHeader, err error)) {
+	handleResultList ...func(c *Context, file *multipart.FileHeader, err error)) {
 
 	// 处理结果的方法
-	handleResultFunc := func(c *gin.Context, file *multipart.FileHeader, err error) {
+	handleResultFunc := func(c *Context, file *multipart.FileHeader, err error) {
 		if handleResultList != nil && len(handleResultList) > 0 {
 			for _, handleResult := range handleResultList {
 				handleResult(c, file, err)
 			}
+		} else { // 默认的文件响应处理方式
+			// 准备响应对象
+			response := c.GetResponseSuccess(nil)
+			data := make(map[string]string)
+
+			// 获取要保存的文件名
+			filename := path.Join(saveDir, filepath.Base(file.Filename))
+			data["filename"] = file.Filename
+
+			// 文件内容
+			fileContent, err := ioutil.ReadFile(filename)
+			if err != nil {
+				a.Log.Error("读取文件内容失败", "error", err)
+				data["file_content"] = base64.StdEncoding.EncodeToString([]byte(""))
+			} else {
+				data["file_content"] = base64.StdEncoding.EncodeToString(fileContent)
+			}
+
+			// 计算MD5值
+			data["md5"] = a.GetMd5(string(fileContent))
+			response.Data = data
+			c.JSON(200, response)
 		}
 	}
 
 	// 添加POST类型的路由
-	a.App.POST(routerPath, func(c *gin.Context) {
+	a.Post(routerPath, func(c *Context) {
 		// 获取上传的文件
 		file, err := c.FormFile(fileName)
 		if err != nil {

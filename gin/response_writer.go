@@ -53,11 +53,11 @@ func (w *responseWriter) reset(writer http.ResponseWriter) {
 	w.status = defaultStatus
 }
 
+// 写入状态码
 func (w *responseWriter) WriteHeader(code int) {
 	if code > 0 && w.status != code {
 		if w.Written() {
-			Log.Debug("[WARNING] Headers were already written. Wanted to override status code %d with %d", "status",
-				w.status, "code", code)
+			Log.Debug("修改响应状态码", "old", w.status, "new", code)
 		}
 		w.status = code
 	}

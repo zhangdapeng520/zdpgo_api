@@ -18,15 +18,15 @@ func ping(c *zdpgo_api.Context) {
 		"data":    string(data),
 	})
 }
+
 func form(c *zdpgo_api.Context) {
-	a := c.PostForm("a")
-	b := c.PostForm("b")
-	c.JSON(http.StatusOK, zdpgo_api.JsonMap{
-		"code":    10000,
-		"message": "success",
-		"a":       a,
-		"b":       b,
+	username := c.PostForm("username")
+	password := c.PostForm("password")
+	response := c.GetResponseSuccess(map[string]interface{}{
+		"username": username,
+		"password": password,
 	})
+	c.JSON(http.StatusOK, response)
 }
 
 func longTime(c *zdpgo_api.Context) {
@@ -40,8 +40,8 @@ func longTime(c *zdpgo_api.Context) {
 func jsonRouter(c *zdpgo_api.Context) {
 	jsonData := make(map[string]interface{}) //注意该结构接受的内容
 	_ = c.BindJSON(&jsonData)
-	fmt.Println("jsonData", jsonData)
-	c.JSON(http.StatusOK, jsonData)
+	response := c.GetResponseSuccess(jsonData)
+	c.JSON(http.StatusOK, response)
 }
 
 func textRouter(c *zdpgo_api.Context) {
@@ -96,7 +96,7 @@ func setupRouter() *zdpgo_api.Api {
 	return api
 }
 
-//go:embed  downloads
+//go:embed downloads
 var fsObj embed.FS
 
 func main() {

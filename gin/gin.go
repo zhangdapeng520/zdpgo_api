@@ -161,7 +161,7 @@ func New() *Engine {
 func Default() *Engine {
 	Log.Debug("使用Logger和Recovery中间件，创建了一个App对象")
 	engine := New()
-	engine.Use(Logger(), Recovery())
+	engine.Use(Recovery())
 	return engine
 }
 
