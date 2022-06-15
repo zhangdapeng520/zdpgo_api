@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/zhangdapeng520/zdpgo_api"
+	"github.com/zhangdapeng520/zdpgo_log"
 )
 
 /*
@@ -25,13 +26,11 @@ c9ybrYOo7t6bs818HMybbahMQylb+qB4aTtHV0JPqZAr8MChRmvze7nNFw==
 -----END  ZDPGO_PASSWORD ECC PUBLIC KEY -----`
 
 	api := zdpgo_api.NewWithConfig(&zdpgo_api.Config{
-		Debug:          true,
-		UploadFileSize: 0,
 		Ecc: zdpgo_api.EccConfig{
 			PrivateKey: []byte(privateKey),
 			PublicKey:  []byte(publicKey),
 		},
-	})
+	}, zdpgo_log.NewWithDebug(true, "log.log"))
 
 	api.Post("/ecctext", func(ctx *zdpgo_api.Context) {
 		// 解析json数据

@@ -91,7 +91,7 @@ func (a *Api) InitValidator() (err error) {
 	// 注册翻译器
 	err = zhs.RegisterDefaultTranslations(validate, trans)
 	if err != nil {
-		a.Log.Error("初始化校验器失败", "error", err)
+		Log.Error("初始化校验器失败", "error", err)
 		return
 	}
 
@@ -102,7 +102,7 @@ func (a *Api) InitValidator() (err error) {
 func (a *Api) Validate(data interface{}) (errData map[string]string) {
 	err := validate.Struct(data)
 	if err != nil {
-		a.Log.Error("校验数据失败", "error", err, "data", data)
+		Log.Error("校验数据失败", "error", err, "data", data)
 		if errors, ok := err.(validator.ValidationErrors); ok {
 			errData = errors.Translate(trans)
 			return

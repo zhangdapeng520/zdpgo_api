@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/zhangdapeng520/zdpgo_api"
+	"github.com/zhangdapeng520/zdpgo_log"
 )
 
 /*
@@ -13,10 +14,7 @@ import (
 */
 
 func main() {
-	api := zdpgo_api.NewWithConfig(&zdpgo_api.Config{
-		Debug:          true,
-		UploadFileSize: 0,
-	})
+	api := zdpgo_api.New(zdpgo_log.NewWithDebug(true, "log.log"))
 
 	api.Post("/aes", func(ctx *zdpgo_api.Context) {
 		// 解析json数据

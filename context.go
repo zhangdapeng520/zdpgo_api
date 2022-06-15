@@ -146,7 +146,7 @@ func (c *Context) ResponseEccStr(api *Api, jsonResponse interface{}) {
 	}
 
 	// 加密结果数据
-	ecc := api.Password.GetEcc()
+	ecc := Password.GetEcc()
 	eccBytes, err := ecc.Encrypt(jsonStrBytes)
 	if err != nil {
 		result = err.Error()

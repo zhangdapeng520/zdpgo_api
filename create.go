@@ -17,7 +17,7 @@ func (a *Api) CreateDirs(filePath string) error {
 	if !a.IsExists(filePath) {
 		err := os.MkdirAll(filePath, os.ModePerm)
 		if err != nil {
-			a.Log.Error("创建文件夹失败", "error", err)
+			Log.Error("创建文件夹失败", "error", err)
 			return err
 		}
 		return err
@@ -29,7 +29,7 @@ func (a *Api) CreateDirs(filePath string) error {
 func (a *Api) IsExists(path string) bool {
 	_, err := os.Stat(path) //os.Stat获取文件信息
 	if err != nil {
-		a.Log.Error("获取文件信息失败", "error", err, "path", path)
+		Log.Error("获取文件信息失败", "error", err, "path", path)
 		if os.IsExist(err) {
 			return true
 		}

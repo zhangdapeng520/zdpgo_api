@@ -3,6 +3,7 @@ package main
 import (
 	"embed"
 	"fmt"
+	"github.com/zhangdapeng520/zdpgo_log"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -14,7 +15,7 @@ func ping(c *zdpgo_api.Context) {
 	data, _ := ioutil.ReadAll(c.Request.Body)
 	c.JSON(http.StatusOK, zdpgo_api.JsonMap{
 		"code":    10000,
-		"message": "success",
+		"message": "success111",
 		"data":    string(data),
 	})
 }
@@ -52,9 +53,7 @@ func textRouter(c *zdpgo_api.Context) {
 
 // 设置路由
 func setupRouter() *zdpgo_api.Api {
-	api := zdpgo_api.NewWithConfig(&zdpgo_api.Config{
-		Debug: true,
-	})
+	api := zdpgo_api.New(zdpgo_log.NewWithDebug(true, "log.log"))
 
 	// 常用方法 ping路由
 	api.Get("/ping", ping)

@@ -13,15 +13,6 @@ import (
 @Description: common 通用
 */
 
-func init() {
-	if Log == nil {
-		Log = zdpgo_log.NewWithDebug(true, "logs/zdpgo/zdpgo_api.log")
-	}
-	if Password == nil {
-		Password = zdpgo_password.New()
-	}
-}
-
 const (
 	AuthUserKey = "user" // 是基本身份验证中用户凭据的cookie名称。
 )

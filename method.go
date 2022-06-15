@@ -19,7 +19,7 @@ func (a *Api) Any(method, routerPath string, handleFuncList ...func(ctx *Context
 
 	// 异常情况
 	if handleFuncList == nil || len(handleFuncList) == 0 {
-		a.Log.Error("API处理方法不能为空", "handleFuncList", handleFuncList)
+		Log.Error("API处理方法不能为空", "handleFuncList", handleFuncList)
 		return
 	}
 
@@ -58,7 +58,7 @@ func (a *Api) Any(method, routerPath string, handleFuncList ...func(ctx *Context
 			handleFuncObj(ctxGin)
 		})
 	default:
-		a.Log.Error("暂不支持此类型的方法", "method", method)
+		Log.Error("暂不支持此类型的方法", "method", method)
 	}
 }
 

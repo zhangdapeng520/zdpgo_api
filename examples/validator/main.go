@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/zhangdapeng520/zdpgo_api"
 	"github.com/zhangdapeng520/zdpgo_api/gin"
+	"github.com/zhangdapeng520/zdpgo_log"
 )
 
 type User struct {
@@ -12,10 +13,11 @@ type User struct {
 }
 
 func main() {
-	api := zdpgo_api.NewWithConfig(zdpgo_api.Config{Debug: true})
+	log := zdpgo_log.NewWithDebug(true, "log.log")
+	api := zdpgo_api.New(log)
 	err := api.InitValidator()
 	if err != nil {
-		api.Log.Error("初始化校验器失败", "error", err)
+		log.Error("初始化校验器失败", "error", err)
 		return
 	}
 
