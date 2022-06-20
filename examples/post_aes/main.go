@@ -14,7 +14,7 @@ import (
 */
 
 func main() {
-	api := zdpgo_api.New(zdpgo_log.NewWithDebug(true, "log.log"))
+	api := zdpgo_api.New(zdpgo_log.Tmp)
 
 	api.Post("/aes", func(ctx *zdpgo_api.Context) {
 		// 解析json数据
