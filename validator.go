@@ -1,8 +1,8 @@
 package zdpgo_api
 
 import (
-	"github.com/go-playground/locales/zh"
-	ut "github.com/go-playground/universal-translator"
+	"github.com/zhangdapeng520/zdpgo_api/locales/zh"
+	ut "github.com/zhangdapeng520/zdpgo_api/translator"
 	"github.com/zhangdapeng520/zdpgo_api/validator"
 	zhs "github.com/zhangdapeng520/zdpgo_api/validator/translations/zh"
 )

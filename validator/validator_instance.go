@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	ut "github.com/go-playground/universal-translator"
+	ut "github.com/zhangdapeng520/zdpgo_api/translator"
 )
 
 const (

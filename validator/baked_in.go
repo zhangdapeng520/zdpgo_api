@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"github.com/zhangdapeng520/zdpgo_api/urn"
 	"net"
 	"net/url"
 	"os"
@@ -19,8 +20,6 @@ import (
 
 	"golang.org/x/crypto/sha3"
 	"golang.org/x/text/language"
-
-	urn "github.com/leodido/go-urn"
 )
 
 // Func accepts a FieldLevel interface for all validation needs. The return

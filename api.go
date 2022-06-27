@@ -42,6 +42,9 @@ func NewWithConfig(config *Config, log *zdpgo_log.Log) *Api {
 	if config.UploadFileSize == 0 {
 		config.UploadFileSize = 33
 	}
+	if config.RateLimit == 0 {
+		config.RateLimit = 3333
+	}
 	a.Config = config
 
 	// App
@@ -63,6 +66,19 @@ func NewWithConfig(config *Config, log *zdpgo_log.Log) *Api {
 		},
 	}, Log)
 
+	// 中间件
+	if config.Middleware.Cors {
+		a.AddCorsMiddleware()
+	}
+	if config.Middleware.RateLimit {
+		a.AddRateLimitMiddleware()
+	}
+
+	// 路由
+	if config.Router.HealthCheck {
+		a.AddHealthCheckRouter()
+	}
+	
 	// 返回对象
 	return a
 }

@@ -2,7 +2,9 @@ package zdpgo_api
 
 import (
 	"github.com/zhangdapeng520/zdpgo_api/gin"
+	"github.com/zhangdapeng520/zdpgo_api/ratelimit"
 	"net/http"
+	"time"
 )
 
 /*
@@ -31,4 +33,20 @@ func (a *Api) AddCorsMiddleware() {
 
 	// 添加快鱼中间件
 	a.App.Use(coreMiddleware)
+}
+
+// AddRateLimitMiddleware 添加请求速率中间件
+func (a *Api) AddRateLimitMiddleware() {
+	rateLimitMiddleware := func(fillInterval time.Duration, cap, quantum int64) gin.HandlerFunc {
+		bucket := ratelimit.NewBucketWithQuantum(fillInterval, cap, quantum)
+		return func(c *gin.Context) {
+			if bucket.TakeAvailable(1) < 1 {
+				c.String(http.StatusForbidden, "请求频率超过最大限制")
+				c.Abort()
+				return
+			}
+			c.Next()
+		}
+	}
+	a.App.Use(rateLimitMiddleware(time.Second, int64(a.Config.RateLimit), int64(a.Config.RateLimit)))
 }

@@ -12,7 +12,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/ugorji/go/codec"
+	"github.com/zhangdapeng520/zdpgo_api/codec"
 )
 
 type msgpackBinding struct{}

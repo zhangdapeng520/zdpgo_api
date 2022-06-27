@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/go-playground/locales"
-	ut "github.com/go-playground/universal-translator"
+	"github.com/zhangdapeng520/zdpgo_api/locales"
+	ut "github.com/zhangdapeng520/zdpgo_api/translator"
 	"github.com/zhangdapeng520/zdpgo_api/validator"
 )
 
