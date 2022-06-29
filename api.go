@@ -64,7 +64,7 @@ func NewWithConfig(config *Config, log *zdpgo_log.Log) *Api {
 			PrivateKey: config.Ecc.PrivateKey,
 			PublicKey:  config.Ecc.PublicKey,
 		},
-	}, Log)
+	})
 
 	// 中间件
 	if config.Middleware.Cors {
@@ -78,7 +78,7 @@ func NewWithConfig(config *Config, log *zdpgo_log.Log) *Api {
 	if config.Router.HealthCheck {
 		a.AddHealthCheckRouter()
 	}
-	
+
 	// 返回对象
 	return a
 }

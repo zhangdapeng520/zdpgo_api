@@ -256,16 +256,14 @@ func (engine *Engine) addRoute(method, path string, handlers HandlersChain) {
 	assert1(len(handlers) > 0, "there must be at least one handler")
 
 	// 打印路由
-	Log.Debug("添加路由成功", "method", method, "path", path)
-	//debugPrintRoute(method, path, handlers)
 
-	root := engine.trees.get(method)
-	if root == nil {
-		root = new(node)
-		root.fullPath = "/"
-		engine.trees = append(engine.trees, methodTree{method: method, root: root})
+	rootRouter := engine.trees.get(method)
+	if rootRouter == nil {
+		rootRouter = new(node)
+		rootRouter.fullPath = "/"
+		engine.trees = append(engine.trees, methodTree{method: method, root: rootRouter})
 	}
-	root.addRoute(path, handlers)
+	rootRouter.addRoute(path, handlers)
 
 	// Update maxParams
 	if paramsCount := countParams(path); paramsCount > engine.maxParams {

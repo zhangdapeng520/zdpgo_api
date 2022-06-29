@@ -45,7 +45,7 @@ func (c *Context) GetEccBodyToJson(jsonData interface{}) error {
 	}
 
 	// 获取私钥
-	ecc := Password.GetEcc()
+	ecc, _ := Password.GetEcc()
 	privateKey, _, err := ecc.GetKey()
 	if err != nil {
 		Log.Error("获取私钥失败", "error", err)
@@ -81,7 +81,7 @@ func (c *Context) GetEccTextBodyToJson(jsonData interface{}) error {
 	}
 
 	// 获取私钥
-	ecc := Password.GetEcc()
+	ecc, _ := Password.GetEcc()
 	privateKey, _, err := ecc.GetKey()
 	if err != nil {
 		Log.Error("获取私钥失败", "error", err)
@@ -146,7 +146,7 @@ func (c *Context) ResponseEccStr(api *Api, jsonResponse interface{}) {
 	}
 
 	// 加密结果数据
-	ecc := Password.GetEcc()
+	ecc, _ := Password.GetEcc()
 	eccBytes, err := ecc.Encrypt(jsonStrBytes)
 	if err != nil {
 		result = err.Error()
