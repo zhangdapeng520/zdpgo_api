@@ -59,12 +59,7 @@ func NewWithConfig(config *Config, log *zdpgo_log.Log) *Api {
 	a.App.MaxMultipartMemory = config.UploadFileSize << 20
 
 	// 加密对象
-	Password = zdpgo_password.NewWithConfig(&zdpgo_password.Config{
-		EccKey: zdpgo_password.Key{
-			PrivateKey: config.Ecc.PrivateKey,
-			PublicKey:  config.Ecc.PublicKey,
-		},
-	})
+	Password = zdpgo_password.New()
 
 	// 中间件
 	if config.Middleware.Cors {

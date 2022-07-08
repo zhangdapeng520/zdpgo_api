@@ -1,7 +1,6 @@
 package zdpgo_api
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"github.com/zhangdapeng520/zdpgo_api/gin"
 	"io/ioutil"
@@ -29,86 +28,6 @@ func (c *Context) GetBody() ([]byte, error) {
 	return body, nil
 }
 
-// GetEccBodyToJson 读取ECC加密的内容并解析为JSON数据
-func (c *Context) GetEccBodyToJson(jsonData interface{}) error {
-	body, err := c.GetBody()
-	if err != nil {
-		Log.Error("读取请求体内容失败", "error", err)
-		return err
-	}
-
-	// base64解码
-	decodeData, err := base64.StdEncoding.DecodeString(string(body))
-	if err != nil {
-		Log.Error("解析base64字符串失败", "error", err)
-		return err
-	}
-
-	// 获取私钥
-	ecc, _ := Password.GetEcc()
-	privateKey, _, err := ecc.GetKey()
-	if err != nil {
-		Log.Error("获取私钥失败", "error", err)
-		return err
-	}
-
-	// ECC解密
-	resultData, err := ecc.DecryptByPrivateKey(decodeData, privateKey)
-	if err != nil {
-		Log.Error("ECC解密数据失败", "error", err)
-		return err
-	}
-
-	// 解析json数据
-	err = json.Unmarshal(resultData, &jsonData)
-	if err != nil {
-		Log.Error("解析JSON数据失败", "error", err)
-		return err
-	}
-
-	// 查看结果
-	Log.Debug("解析ECC数据成功", "data", jsonData)
-
-	// 返回
-	return nil
-}
-
-func (c *Context) GetEccTextBodyToJson(jsonData interface{}) error {
-	body, err := c.GetBody()
-	if err != nil {
-		Log.Error("读取请求体内容失败", "error", err)
-		return err
-	}
-
-	// 获取私钥
-	ecc, _ := Password.GetEcc()
-	privateKey, _, err := ecc.GetKey()
-	if err != nil {
-		Log.Error("获取私钥失败", "error", err)
-		return err
-	}
-
-	// ECC解密
-	resultData, err := ecc.DecryptByPrivateKey(body, privateKey)
-	if err != nil {
-		Log.Error("ECC解密数据失败", "error", err)
-		return err
-	}
-
-	// 解析json数据
-	err = json.Unmarshal(resultData, &jsonData)
-	if err != nil {
-		Log.Error("解析JSON数据失败", "error", err)
-		return err
-	}
-
-	// 查看结果
-	Log.Debug("解析ECC数据成功", "data", jsonData)
-
-	// 返回
-	return nil
-}
-
 func (c *Context) GetAesTextBodyToJson(jsonData interface{}) error {
 	body, err := c.GetBody()
 	if err != nil {
@@ -132,30 +51,6 @@ func (c *Context) GetAesTextBodyToJson(jsonData interface{}) error {
 
 	// 返回
 	return nil
-}
-
-func (c *Context) ResponseEccStr(api *Api, jsonResponse interface{}) {
-	var result string
-
-	// 将结果转换为JSON字符串
-	jsonStrBytes, err := json.Marshal(jsonResponse)
-	if err != nil {
-		result = err.Error()
-		c.String(501, result)
-		return
-	}
-
-	// 加密结果数据
-	ecc, _ := Password.GetEcc()
-	eccBytes, err := ecc.Encrypt(jsonStrBytes)
-	if err != nil {
-		result = err.Error()
-		c.String(501, result)
-		return
-	}
-
-	// 返回加密数据
-	c.String(200, string(eccBytes))
 }
 
 func (c *Context) ResponseAesStr(jsonResponse interface{}) {
