@@ -14,7 +14,7 @@ type ApiGroup struct {
 func (g *ApiGroup) Any(method, routerPath string, handleFuncList ...func(ctx *Context)) {
 
 	// 异常情况
-	if handleFuncList == nil || len(handleFuncList) == 0 {
+	if handleFuncList == nil {
 		return
 	}
 

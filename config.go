@@ -11,7 +11,9 @@ type Config struct {
 }
 
 type RouterConfig struct {
-	HealthCheck bool `yaml:"health_check" json:"health_check"`
+	HealthCheck bool `yaml:"health_check" json:"health_check"` // 健康检查路由
+	Static      bool `yaml:"static" json:"static"`             // 静态文件路由
+	Upload      bool `yaml:"upload" json:"upload"`             // 文件上传路由
 }
 
 type MiddlewareConfig struct {

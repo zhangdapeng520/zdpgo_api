@@ -63,6 +63,12 @@ func NewWithConfig(config *Config) *Api {
 	if config.Router.HealthCheck {
 		a.AddHealthCheckRouter()
 	}
+	if config.Router.Static {
+		a.AddStaticRouter("/static", "./static")
+	}
+	if config.Router.Upload {
+		a.AddUploadRouter("/upload", "file", "./uploads")
+	}
 
 	// 返回对象
 	return a

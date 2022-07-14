@@ -1,6 +1,8 @@
 package zdpgo_api
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/xml"
 	"net/http"
 	"os"
@@ -165,4 +167,10 @@ func IsExists(path string) bool {
 		return os.IsExist(err)
 	}
 	return true
+}
+
+// GetMd5 获取数据的MD5值
+func GetMd5(data string) string {
+	r := md5.Sum([]byte(data))
+	return hex.EncodeToString(r[:])
 }
