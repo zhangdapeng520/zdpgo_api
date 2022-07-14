@@ -1,7 +1,7 @@
 package zdpgo_api
 
 import (
-	"github.com/zhangdapeng520/zdpgo_api/gin"
+	"fmt"
 	"strings"
 	"unsafe"
 )
@@ -19,12 +19,12 @@ func (a *Api) Any(method, routerPath string, handleFuncList ...func(ctx *Context
 
 	// 异常情况
 	if handleFuncList == nil || len(handleFuncList) == 0 {
-		Log.Error("API处理方法不能为空", "handleFuncList", handleFuncList)
+		fmt.Println("API处理方法不能为空", "handleFuncList", handleFuncList)
 		return
 	}
 
 	// 处理结果的方法对象
-	handleFuncObj := func(ctxGin *gin.Context) {
+	handleFuncObj := func(ctxGin *Context) {
 		for _, handleFunc := range handleFuncList {
 			ctxApiPointer := unsafe.Pointer(ctxGin) // 将父类实例转为通用指针
 			ctxApi := (*Context)(ctxApiPointer)     //再转换为子类结构体
@@ -34,31 +34,31 @@ func (a *Api) Any(method, routerPath string, handleFuncList ...func(ctx *Context
 
 	switch strings.ToUpper(method) {
 	case "GET":
-		a.App.GET(routerPath, func(ctxGin *gin.Context) {
+		a.App.GET(routerPath, func(ctxGin *Context) {
 			handleFuncObj(ctxGin)
 		})
 	case "POST":
-		a.App.POST(routerPath, func(ctxGin *gin.Context) {
+		a.App.POST(routerPath, func(ctxGin *Context) {
 			handleFuncObj(ctxGin)
 		})
 	case "PUT":
-		a.App.PUT(routerPath, func(ctxGin *gin.Context) {
+		a.App.PUT(routerPath, func(ctxGin *Context) {
 			handleFuncObj(ctxGin)
 		})
 	case "DELETE":
-		a.App.DELETE(routerPath, func(ctxGin *gin.Context) {
+		a.App.DELETE(routerPath, func(ctxGin *Context) {
 			handleFuncObj(ctxGin)
 		})
 	case "PATCH":
-		a.App.PATCH(routerPath, func(ctxGin *gin.Context) {
+		a.App.PATCH(routerPath, func(ctxGin *Context) {
 			handleFuncObj(ctxGin)
 		})
 	case "HEAD":
-		a.App.HEAD(routerPath, func(ctxGin *gin.Context) {
+		a.App.HEAD(routerPath, func(ctxGin *Context) {
 			handleFuncObj(ctxGin)
 		})
 	default:
-		Log.Error("暂不支持此类型的方法", "method", method)
+		fmt.Println("暂不支持此类型的方法", "method", method)
 	}
 }
 

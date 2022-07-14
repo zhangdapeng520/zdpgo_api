@@ -2,19 +2,10 @@ package main
 
 import (
 	"github.com/zhangdapeng520/zdpgo_api"
-	"github.com/zhangdapeng520/zdpgo_log"
 )
 
-/*
-@Time : 2022/6/6 15:14
-@Author : 张大鹏
-@File : main.go
-@Software: Goland2021.3.1
-@Description:
-*/
-
 func main() {
-	api := zdpgo_api.New(zdpgo_log.Tmp)
+	api := zdpgo_api.NewApi()
 
 	api.Post("/aes", func(ctx *zdpgo_api.Context) {
 		// 解析json数据

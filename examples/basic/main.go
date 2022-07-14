@@ -3,7 +3,6 @@ package main
 import (
 	"embed"
 	"fmt"
-	"github.com/zhangdapeng520/zdpgo_log"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -53,7 +52,7 @@ func textRouter(c *zdpgo_api.Context) {
 
 // 设置路由
 func setupRouter() *zdpgo_api.Api {
-	api := zdpgo_api.New(zdpgo_log.NewWithDebug(true, "log.log"))
+	api := zdpgo_api.NewApi()
 
 	// 常用方法 ping路由
 	api.Get("/ping", ping)

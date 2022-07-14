@@ -55,7 +55,6 @@ func (a *Api) AddUploadRouter(
 			// 文件内容
 			fileContent, err := ioutil.ReadFile(filename)
 			if err != nil {
-				Log.Error("读取文件内容失败", "error", err)
 				data["file_content"] = base64.StdEncoding.EncodeToString([]byte(""))
 			} else {
 				data["file_content"] = base64.StdEncoding.EncodeToString(fileContent)
@@ -73,15 +72,13 @@ func (a *Api) AddUploadRouter(
 		// 获取上传的文件
 		file, err := c.FormFile(fileName)
 		if err != nil {
-			Log.Error("获取上传的文件失败", "error", err, "filename", fileName)
 			handleResultFunc(c, file, err)
 			return
 		}
 
 		// 创建要保存的文件夹
-		err = a.CreateDirs(saveDir)
+		err = CreateDirs(saveDir)
 		if err != nil {
-			Log.Error("创建要保存的文件夹失败", "error", err, "saveDir", saveDir)
 			handleResultFunc(c, file, err)
 			return
 		}
@@ -91,7 +88,6 @@ func (a *Api) AddUploadRouter(
 
 		// 保存上传文件
 		if err = c.SaveUploadedFile(file, filename); err != nil {
-			Log.Error("保存上传文件失败", "error", err, "filename", fileName)
 			handleResultFunc(c, file, err)
 			return
 		}

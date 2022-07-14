@@ -2,8 +2,6 @@ package main
 
 import (
 	"github.com/zhangdapeng520/zdpgo_api"
-	"github.com/zhangdapeng520/zdpgo_api/gin"
-	"github.com/zhangdapeng520/zdpgo_log"
 )
 
 type User struct {
@@ -13,32 +11,30 @@ type User struct {
 }
 
 func main() {
-	log := zdpgo_log.NewWithDebug(true, "log.log")
-	api := zdpgo_api.New(log)
+	api := zdpgo_api.NewApi()
 	err := api.InitValidator()
 	if err != nil {
-		log.Error("初始化校验器失败", "error", err)
 		return
 	}
 
-	api.App.GET("/language", func(context *gin.Context) {
+	api.App.GET("/language", func(context *zdpgo_api.Context) {
 		var user User
 		// 绑定查询参数
 		err = context.ShouldBindQuery(&user)
 		if err != nil {
-			context.JSON(500, gin.H{"msg": err})
+			context.JSON(500, zdpgo_api.H{"msg": err})
 			return
 		}
 
 		// 使用验证器验证
 		errData := api.Validate(user)
 		if errData != nil {
-			context.JSON(500, gin.H{
+			context.JSON(500, zdpgo_api.H{
 				"errData": errData,
 			})
 			return
 		}
-		context.JSON(200, gin.H{"msg": "校验成功"})
+		context.JSON(200, zdpgo_api.H{"msg": "校验成功"})
 	})
 
 	// 测试失败：http://127.0.0.1:3333/language

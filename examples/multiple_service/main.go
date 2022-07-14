@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/zhangdapeng520/zdpgo_api/gin"
 	"log"
 	"net/http"
 	"time"
 
+	"github.com/zhangdapeng520/zdpgo_api"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -16,14 +16,14 @@ var (
 // 路由1：注意，*api.Engine可以被当成http.Handler使用
 func router01() http.Handler {
 	// 创建服务
-	e := gin.New()
-	e.Use(gin.Recovery())
+	e := zdpgo_api.New()
+	e.Use(zdpgo_api.Recovery())
 
 	// 监听路径
-	e.GET("/", func(c *gin.Context) {
+	e.GET("/", func(c *zdpgo_api.Context) {
 		c.JSON(
 			http.StatusOK,
-			gin.H{
+			zdpgo_api.H{
 				"code":  http.StatusOK,
 				"error": "Welcome server 01",
 			},
@@ -36,14 +36,14 @@ func router01() http.Handler {
 // 路由2
 func router02() http.Handler {
 	// 创建服务
-	e := gin.New()
-	e.Use(gin.Recovery())
+	e := zdpgo_api.New()
+	e.Use(zdpgo_api.Recovery())
 
 	// 监听路径
-	e.GET("/", func(c *gin.Context) {
+	e.GET("/", func(c *zdpgo_api.Context) {
 		c.JSON(
 			http.StatusOK,
-			gin.H{
+			zdpgo_api.H{
 				"code":  http.StatusOK,
 				"error": "Welcome server 02",
 			},

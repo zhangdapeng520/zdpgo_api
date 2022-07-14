@@ -1,13 +1,5 @@
 package zdpgo_api
 
-/*
-@Time : 2022/5/16 16:25
-@Author : 张大鹏
-@File : config.go
-@Software: Goland2021.3.1
-@Description: config配置相关
-*/
-
 type Config struct {
 	Debug          bool             `yaml:"debug" json:"debug"`
 	Host           string           `yaml:"host" json:"host"`                         // 启动地址，默认0.0.0.0

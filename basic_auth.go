@@ -1,7 +1,6 @@
 package zdpgo_api
 
 import (
-	"github.com/zhangdapeng520/zdpgo_api/gin"
 	"unsafe"
 )
 
@@ -20,7 +19,7 @@ func (a *Api) GetBasicAuthGroup(routerPath string, accounts StringMap) (group *A
 	mapString := (*map[string]string)(accountsPointer)
 
 	// 获取gin的分组
-	ginGroup := a.App.Group(routerPath, gin.BasicAuth(*mapString))
+	ginGroup := a.App.Group(routerPath, BasicAuth(*mapString))
 
 	// 转换为api的分组
 	ginGroupPointer := unsafe.Pointer(ginGroup)

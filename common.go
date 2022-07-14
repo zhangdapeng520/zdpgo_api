@@ -1,7 +1,6 @@
 package zdpgo_api
 
 import (
-	"github.com/zhangdapeng520/zdpgo_log"
 	"github.com/zhangdapeng520/zdpgo_password"
 )
 
@@ -13,13 +12,8 @@ import (
 @Description: common 通用
 */
 
-const (
-	AuthUserKey = "user" // 是基本身份验证中用户凭据的cookie名称。
-)
-
 var (
-	Password *zdpgo_password.Password
-	Log      *zdpgo_log.Log
+	Password = zdpgo_password.New()
 )
 
 // JsonMap json字典类型

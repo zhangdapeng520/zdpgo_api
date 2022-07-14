@@ -1,20 +1,3 @@
-// Copyright (c) 2012-2020 Ugorji Nwoke. All rights reserved.
-// Use of this source code is governed by a MIT license found in the LICENSE file.
-
-/*
-Msgpack-c implementation powers the c, c++, python, ruby, etc libraries.
-We need to maintain compatibility with it and how it encodes integer values
-without caring about the type.
-
-For compatibility with behaviour of msgpack-c reference implementation:
-  - Go intX (>0) and uintX
-       IS ENCODED AS
-    msgpack +ve fixnum, unsigned
-  - Go intX (<0)
-       IS ENCODED AS
-    msgpack -ve fixnum, signed
-*/
-
 package codec
 
 import (

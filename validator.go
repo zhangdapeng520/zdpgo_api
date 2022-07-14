@@ -7,13 +7,6 @@ import (
 	zhs "github.com/zhangdapeng520/zdpgo_api/validator/translations/zh"
 )
 
-/*
-@Time : 2022/5/16 19:56
-@Author : 张大鹏
-@File : validator.go
-@Software: Goland2021.3.1
-@Description: validator验证器相关方法
-*/
 var (
 	validate = validator.New()          // 实例化验证器
 	chinese  = zh.New()                 // 获取中文翻译器
@@ -91,7 +84,6 @@ func (a *Api) InitValidator() (err error) {
 	// 注册翻译器
 	err = zhs.RegisterDefaultTranslations(validate, trans)
 	if err != nil {
-		Log.Error("初始化校验器失败", "error", err)
 		return
 	}
 
@@ -102,7 +94,6 @@ func (a *Api) InitValidator() (err error) {
 func (a *Api) Validate(data interface{}) (errData map[string]string) {
 	err := validate.Struct(data)
 	if err != nil {
-		Log.Error("校验数据失败", "error", err, "data", data)
 		if errors, ok := err.(validator.ValidationErrors); ok {
 			errData = errors.Translate(trans)
 			return
