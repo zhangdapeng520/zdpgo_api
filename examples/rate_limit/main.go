@@ -18,14 +18,9 @@ func main() {
 	})
 	api.AddRateLimitMiddleware()
 	api.Post("/aes", func(ctx *zdpgo_api.Context) {
-		// 解析json数据
 		var jsonData struct {
 			Username string `json:"username"`
 			Age      int    `json:"age"`
-		}
-		err := ctx.GetAesTextBodyToJson(&jsonData)
-		if err != nil {
-			panic(err)
 		}
 
 		// 加密响应数据
@@ -35,7 +30,7 @@ func main() {
 			Status: true,
 			Data:   jsonData,
 		}
-		ctx.ResponseAesStr(response)
+		ctx.JSON(200, ctx.GetResponseSuccess(response))
 	})
 
 	// 启动

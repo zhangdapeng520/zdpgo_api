@@ -1,7 +1,6 @@
 package zdpgo_api
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -1168,49 +1167,4 @@ func (c *Context) GetBody() ([]byte, error) {
 		return nil, err
 	}
 	return body, nil
-}
-
-func (c *Context) GetAesTextBodyToJson(jsonData interface{}) error {
-	body, err := c.GetBody()
-	if err != nil {
-		return err
-	}
-
-	// AES解密
-	resultData, err := Password.Aes.Decrypt(body)
-	if err != nil {
-		return err
-	}
-
-	// 解析json数据
-	err = json.Unmarshal(resultData, &jsonData)
-	if err != nil {
-		return err
-	}
-
-	// 返回
-	return nil
-}
-
-func (c *Context) ResponseAesStr(jsonResponse interface{}) {
-	var result string
-
-	// 将结果转换为JSON字符串
-	jsonStrBytes, err := json.Marshal(jsonResponse)
-	if err != nil {
-		result = err.Error()
-		c.String(501, result)
-		return
-	}
-
-	// 加密结果数据
-	aesBytes, err := Password.Aes.Encrypt(jsonStrBytes)
-	if err != nil {
-		result = err.Error()
-		c.String(501, result)
-		return
-	}
-
-	// 返回加密数据
-	c.String(200, string(aesBytes))
 }
