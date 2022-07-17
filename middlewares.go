@@ -10,7 +10,7 @@ import (
 /*
 @Time : 2022/5/16 17:51
 @Author : 张大鹏
-@File : add_middleware.go
+@File : middlewares.go
 @Software: Goland2021.3.1
 @Description: 添加中间件
 */
@@ -31,8 +31,27 @@ func (a *Api) AddCorsMiddleware() {
 		}
 	}
 
-	// 添加快鱼中间件
+	// 添加跨域中间件
 	a.App.Use(coreMiddleware)
+}
+
+// MiddlewareCors 跨域中间件
+func MiddlewareCors() HandlerFunc {
+	return func(c *Context) {
+		method := c.Request.Method
+
+		c.Header("Access-Control-Allow-Origin_api", "*")
+		c.Header("Access-Control-Allow-Headers", "Content-Type,AccessToken,X-CSRF-Token, Authorization, Token, "+
+			"x-token, X-ZDPGOJWT-Token")
+		c.Header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PATCH, PUT")
+		c.Header("Access-Control-Expose-Headers", "Content-Length, Access-Control-Allow-Origin, "+
+			"Access-Control-Allow-Headers, Content-Type")
+		c.Header("Access-Control-Allow-Credentials", "true")
+
+		if method == "OPTIONS" {
+			c.AbortWithStatus(http.StatusNoContent)
+		}
+	}
 }
 
 // AddRateLimitMiddleware 添加请求速率中间件
