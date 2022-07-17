@@ -1,10 +1,18 @@
 package zdpgo_api
 
 import (
+	"fmt"
+	"github.com/zhangdapeng520/zdpgo_api/binding"
+	"github.com/zhangdapeng520/zdpgo_api/locales/en"
 	"github.com/zhangdapeng520/zdpgo_api/locales/zh"
 	ut "github.com/zhangdapeng520/zdpgo_api/translator"
 	"github.com/zhangdapeng520/zdpgo_api/validator"
+	en_translations "github.com/zhangdapeng520/zdpgo_api/validator/translations/en"
+	zh_translations "github.com/zhangdapeng520/zdpgo_api/validator/translations/zh"
 	zhs "github.com/zhangdapeng520/zdpgo_api/validator/translations/zh"
+	"net/http"
+	"reflect"
+	"strings"
 )
 
 var (
@@ -12,6 +20,7 @@ var (
 	chinese  = zh.New()                 // 获取中文翻译器
 	uni      = ut.New(chinese, chinese) // 设置成中文翻译器
 	trans, _ = uni.GetTranslator("zh")  // 获取翻译字典
+	Trans    ut.Translator
 )
 
 /**
@@ -99,5 +108,66 @@ func (a *Api) Validate(data interface{}) (errData map[string]string) {
 			return
 		}
 	}
+	return
+}
+
+func InitTransChinese() error {
+	return InitTrans("zh")
+}
+
+func InitTrans(locale string) (err error) {
+	// 修改gin框架中的validator引擎属性, 实现定制
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		// 注册一个获取json的tag的自定义方法
+		v.RegisterTagNameFunc(func(fld reflect.StructField) string {
+			name := strings.SplitN(fld.Tag.Get("json"), ",", 2)[0]
+			if name == "-" {
+				return ""
+			}
+			return name
+		})
+
+		zhT := zh.New() // 中文翻译器
+		enT := en.New() // 英文翻译器
+		// 第一个参数是备用的语言环境，后面的参数是应该支持的语言环境
+		uni := ut.New(enT, zhT, enT)
+		Trans, ok = uni.GetTranslator(locale)
+		if !ok {
+			return fmt.Errorf("uni.GetTranslator(%s)", locale)
+		}
+
+		switch locale {
+		case "en":
+			en_translations.RegisterDefaultTranslations(v, Trans)
+		case "zh":
+			zh_translations.RegisterDefaultTranslations(v, Trans)
+		default:
+			en_translations.RegisterDefaultTranslations(v, Trans)
+		}
+		return
+	}
+	return
+}
+
+// removeTopStruct 移除校验错误顶层的结构体
+func removeTopStruct(fileds map[string]string) map[string]string {
+	rsp := map[string]string{}
+	for field, err := range fileds {
+		rsp[field[strings.Index(field, ".")+1:]] = err
+	}
+	return rsp
+}
+
+// HandleValidatorError 处理校验错误
+func HandleValidatorError(c *Context, err error) {
+	errs, ok := err.(validator.ValidationErrors)
+	if !ok {
+		c.JSON(http.StatusOK, H{
+			"msg": err.Error(),
+		})
+	}
+	c.JSON(http.StatusBadRequest, H{
+		"error": removeTopStruct(errs.Translate(Trans)),
+	})
 	return
 }
