@@ -12,6 +12,7 @@ import (
 	zhs "github.com/zhangdapeng520/zdpgo_api/validator/translations/zh"
 	"net/http"
 	"reflect"
+	"regexp"
 	"strings"
 )
 
@@ -112,7 +113,14 @@ func (a *Api) Validate(data interface{}) (errData map[string]string) {
 }
 
 func InitTransChinese() error {
-	return InitTrans("zh")
+	err := InitTrans("zh")
+	if err != nil {
+		return err
+	}
+
+	RegisterMobileValidator() // 注册手机号验证器
+
+	return nil
 }
 
 func InitTrans(locale string) (err error) {
@@ -146,6 +154,7 @@ func InitTrans(locale string) (err error) {
 		}
 		return
 	}
+
 	return
 }
 
@@ -170,4 +179,28 @@ func HandleValidatorError(c *Context, err error) {
 		"error": removeTopStruct(errs.Translate(Trans)),
 	})
 	return
+}
+
+// ValidateMobile 手机号验证器
+func ValidateMobile(fl validator.FieldLevel) bool {
+	mobile := fl.Field().String()
+	//使用正则表达式判断是否合法
+	ok, _ := regexp.MatchString(`^1([38][0-9]|14[579]|5[^4]|16[6]|7[1-35-8]|9[189])\d{8}$`, mobile)
+	if !ok {
+		return false
+	}
+	return true
+}
+
+func RegisterMobileValidator() {
+	//注册验证器
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		_ = v.RegisterValidation("mobile", ValidateMobile)
+		_ = v.RegisterTranslation("mobile", Trans, func(ut ut.Translator) error {
+			return ut.Add("mobile", "{0} 非法的手机号码!", true) // see universal-translator for details
+		}, func(ut ut.Translator, fe validator.FieldError) string {
+			t, _ := ut.T("mobile", fe.Field())
+			return t
+		})
+	}
 }
