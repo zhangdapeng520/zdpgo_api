@@ -10,12 +10,15 @@ import (
 	"path/filepath"
 )
 
+// RouterHealthCheck 健康检查处理器
+func RouterHealthCheck(ctx *Context) {
+	success := ctx.GetResponseSuccess(nil)
+	ctx.JSON(200, success)
+}
+
 // AddHealthCheckRouter 添加健康检查接口
 func (a *Api) AddHealthCheckRouter() {
-	a.Get("/health", func(ctx *Context) {
-		success := ctx.GetResponseSuccess(nil)
-		ctx.JSON(200, success)
-	})
+	a.Get("/health", RouterHealthCheck)
 }
 
 // AddUploadRouter 添加文件上传路由

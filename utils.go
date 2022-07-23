@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/xml"
+	"net"
 	"net/http"
 	"os"
 	"path"
@@ -19,9 +20,7 @@ const BindKey = "_gin-gonic/api/bindkey"
 func Bind(val interface{}) HandlerFunc {
 	value := reflect.ValueOf(val)
 	if value.Kind() == reflect.Ptr {
-		panic(`Bind struct can not be a pointer. Example:
-	Use: api.Bind(Struct{}) instead of api.Bind(&Struct{})
-`)
+		panic(`Bind struct can not be a pointer. Example: Use: api.Bind(Struct{}) instead of api.Bind(&Struct{})`)
 	}
 	typ := value.Type()
 
@@ -31,6 +30,21 @@ func Bind(val interface{}) HandlerFunc {
 			c.Set(BindKey, obj)
 		}
 	}
+}
+
+// GetFreePort 获取可用的端口号
+func GetFreePort() (int, error) {
+	addr, err := net.ResolveTCPAddr("tcp", "localhost:0")
+	if err != nil {
+		return 0, err
+	}
+
+	l, err := net.ListenTCP("tcp", addr)
+	if err != nil {
+		return 0, err
+	}
+	defer l.Close()
+	return l.Addr().(*net.TCPAddr).Port, nil
 }
 
 // WrapF is a helper function for wrapping http.HandlerFunc and returns a Gin middleware.

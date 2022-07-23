@@ -299,19 +299,18 @@ func iterate(path, method string, routes RoutesInfo, root *node) RoutesInfo {
 	return routes
 }
 
-// Run attaches the router to a http.Server and starts listening and serving HTTP requests.
-// It is a shortcut for http.ListenAndServe(addr, router)
-// Note: this method will block the calling goroutine indefinitely unless an error happens.
+// Run 在指定地址上运行服务，地址示例：0.0.0.0:8888
 func (engine *Engine) Run(addr ...string) (err error) {
-	defer func() { fmt.Println(err.Error()) }()
+	defer func() {
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+	}()
 
-	if engine.isUnsafeTrustedProxies() {
-		fmt.Println("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
-			"Please check https://pkg.go.dev/github.com/zhangdapeng520/zdpgo_api/api#readme-don-t-trust-all-proxies for details.")
-	}
-
+	// 解析地址
 	address := resolveAddress(addr)
-	fmt.Println("Listening and serving HTTP on ", "address", address)
+
+	// 启动服务
 	err = http.ListenAndServe(address, engine)
 	return
 }
